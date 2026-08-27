@@ -1,28 +1,20 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import type { Swiper as SwiperType } from "swiper"
 import getReview from "@/lib/getColorAndReview"
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules"
 
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import "swiper/css"
+import "swiper/css/navigation"
 import Image from "next/image"
 
 export default function UpcomingCarousel() {
-    const swiperRef = useRef<SwiperType | null>(null)
-
-    const [isBeginning, setIsBeginning] = useState(true)
-    const [isEnd, setIsEnd] = useState(false)
-
-    const updateButtons = (swiper: SwiperType) => {
-        setIsBeginning(swiper.isBeginning)
-        setIsEnd(swiper.isEnd)
-    }
-
-
+    const prevRef = useRef<HTMLButtonElement | null>(null)
+    const nextRef = useRef<HTMLButtonElement | null>(null)
 
     const games = [
         {
@@ -85,7 +77,6 @@ export default function UpcomingCarousel() {
             image: "/games/alan-wake-2.jpg",
             review: null
         },
-
         {
             name: "Phantom Blade Zero",
             image: "/games/phantom-blade-zero.jpg",
@@ -94,68 +85,80 @@ export default function UpcomingCarousel() {
     ]
 
     return (
-        <div className=" relative w-full mt-20  ">
-
+        <div className="relative w-full mt-20">
 
             {/* الأزرار */}
-            <div className=" flex justify-between gap-2 items-center mb-5">
-
-                {/* Previous */}
-
-
-                {/* Next */}
-
+            <div className="flex justify-between gap-2 items-center mb-5">
 
                 <div className="flex items-center gap-5">
-                    <h1 className="text-2xl text-gray-600 font-bold whitespace-nowrap"> الألعاب القادمة</h1>
-                    {/* <h1 className="underline text-gray-500">عرض الكل</h1> */}
+                    <h1 className="text-2xl dark:text-gray-200 text-gray-600 font-bold whitespace-nowrap">
+                        الألعاب القادمة
+                    </h1>
 
+                    {/* <h1 className="underline text-gray-500">
+                        عرض الكل
+                    </h1> */}
                 </div>
-                <div className="w-4/5 h-[2px]  bg-gray-200"></div>
 
+                <div className="w-4/5 h-[2px] bg-gray-200"></div>
 
+                <div className="flex gap-2">
 
-                <div className="flex gap-2 ">
+                    {/* Next */}
                     <button
+                        ref={nextRef}
                         type="button"
-                        disabled={isEnd}
-                        onClick={() => swiperRef.current?.slideNext()}
-                        className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-black/70 bg-white shadow-sm transition ${isEnd
-                            ? "cursor-not-allowed opacity-30"
-                            : "hover:bg-gray-100"
-                            }`}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-700 bg-white text-gray-900 shadow-sm transition
+                        dark:border-gray-500 dark:bg-gray-800 dark:text-white
+                        hover:bg-gray-100 dark:hover:bg-gray-700
+                        disabled:cursor-not-allowed disabled:opacity-30"
                     >
                         <ChevronRight size={20} />
                     </button>
 
-
+                    {/* Previous */}
                     <button
+                        ref={prevRef}
                         type="button"
-                        disabled={isBeginning}
-                        onClick={() => swiperRef.current?.slidePrev()}
-                        className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-black/70 bg-white shadow-sm transition ${isBeginning
-                            ? "cursor-not-allowed opacity-30"
-                            : "hover:bg-gray-100"
-                            }`}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-700 bg-white text-gray-900 shadow-sm transition
+                        dark:border-gray-500 dark:bg-gray-800 dark:text-white
+                        hover:bg-gray-100 dark:hover:bg-gray-700
+                        disabled:cursor-not-allowed disabled:opacity-30"
                     >
                         <ChevronLeft size={20} />
                     </button>
+
                 </div>
-
-
             </div>
 
-
             {/* Carousel */}
-            <Swiper className=" relative "
-                modules={[Autoplay]}
+            <Swiper
+                className="relative"
+                modules={[Autoplay, Navigation]}
 
                 autoplay={{
-                    delay: 3000, // 2 ثواني
+                    delay: 3000,
                     // disableOnInteraction: false,
                 }}
+
                 spaceBetween={10}
                 slidesPerView={7}
+
+                navigation={{
+                    prevEl: prevRef.current,
+                    nextEl: nextRef.current,
+                }}
+
+                onBeforeInit={(swiper: SwiperType) => {
+                    if (
+                        swiper.params.navigation &&
+                        typeof swiper.params.navigation !== "boolean"
+                    ) {
+                        swiper.params.navigation.prevEl = prevRef.current
+                        swiper.params.navigation.nextEl = nextRef.current
+                    }
+                }}
+
                 breakpoints={{
                     300: {
                         slidesPerView: 2,
@@ -173,15 +176,10 @@ export default function UpcomingCarousel() {
                         slidesPerView: 7,
                     },
                 }}
-                onSwiper={(swiper) => {
-                    swiperRef.current = swiper
-                    updateButtons(swiper)
-                }}
-                onSlideChange={updateButtons}
             >
 
                 {games.reverse().map((game) => {
-                    const [color, label] = getReview(game.review);
+                    const [color, label] = getReview(game.review)
 
                     return (
                         <SwiperSlide key={game.name}>
@@ -207,7 +205,11 @@ export default function UpcomingCarousel() {
                                     <div
                                         className={`${color} rounded-sm flex h-7 w-7 items-center justify-center p-3 text-sm font-bold text-white`}
                                     >
-                                        {game.review ?? <h1 className=" text-xs">TBD</h1>}
+                                        {game.review ?? (
+                                            <h1 className="text-xs">
+                                                TBD
+                                            </h1>
+                                        )}
                                     </div>
 
                                     <span className="text-sm">
@@ -215,15 +217,15 @@ export default function UpcomingCarousel() {
                                     </span>
 
                                 </div>
+
                             </div>
                         </SwiperSlide>
-                    );
+                    )
                 })}
 
+                <div className="absolute left-0 top-0 z-20 h-full w-10 bg-gradient-to-r from-white to-transparent dark:from-gray-950 dark:to-transparent" />
 
-
-                <div className="absolute left-0 top-0 z-20 h-full w-10 bg-gradient-to-r from-white to-transparent" />
-                *</Swiper>
+            </Swiper>
 
         </div>
     )

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header/Header";
+import { ThemeProvider } from "@/app/components/derlAndLight/theme-provider"
+
 
 const arabicFont = IBM_Plex_Sans_Arabic({
   variable: "--font-arabic",
@@ -20,10 +22,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={arabicFont.variable}>
+    <html
+  lang="ar"
+  dir="rtl"
+  className={arabicFont.variable}
+  suppressHydrationWarning
+>
       <body className="min-h-screen flex flex-col antialiased">
-        <Header />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
@@ -115,60 +129,60 @@ export default function RootLayout({
 
 
 
-                        //       ┌──────────────────────┐
-                        //       │       USERS          │
-                        //       │                      │
-                        //       │ Guest / User / Admin │
-                        //       └──────────┬───────────┘
-                        //                  │
-                        //                  │ HTTPS
-                        //                  ▼
-                        //  ┌─────────────────────────────┐
-                        //  │          NEXT.JS            │
-                        //  │         Frontend            │
-                        //  │                             │
-                        //  │ Home                       │
-                        //  │ Games                       │
-                        //  │ Game Details                │
-                        //  │ Search                      │
-                        //  │ Reviews                     │
-                        //  │ Profile                     │
-                        //  │ Login / Register            │
-                        //  │ Admin Dashboard             │
-                        //  └──────────────┬──────────────┘
-                        //                 │
-                        //                 │ REST API / HTTPS
-                        //                 ▼
-                        //  ┌─────────────────────────────┐
-                        //  │          NODE.JS            │
-                        //  │          BACKEND            │
-                        //  │                             │
-                        //  │ Auth Module                 │
-                        //  │ Users Module                │
-                        //  │ Games Module                │
-                        //  │ Reviews Module              │
-                        //  │ Ratings Module              │
-                        //  │ Genres Module               │
-                        //  │ Platforms Module            │
-                        //  │ Admin Module                │
-                        //  │ Search Module               │
-                        //  │ Upload Module               │
-                        //  └──────────────┬──────────────┘
-                        //                 │
-                        //                 │ Prisma ORM
-                        //                 ▼
-                        //  ┌─────────────────────────────┐
-                        //  │        POSTGRESQL           │
-                        //  │          DATABASE           │
-                        //  │                             │
-                        //  │ Users                       │
-                        //  │ Games                       │
-                        //  │ Reviews                     │
-                        //  │ Ratings                     │
-                        //  │ Genres                      │
-                        //  │ Platforms                   │
-                        //  │ ...                         │
-                        //  └─────────────────────────────┘
+//       ┌──────────────────────┐
+//       │       USERS          │
+//       │                      │
+//       │ Guest / User / Admin │
+//       └──────────┬───────────┘
+//                  │
+//                  │ HTTPS
+//                  ▼
+//  ┌─────────────────────────────┐
+//  │          NEXT.JS            │
+//  │         Frontend            │
+//  │                             │
+//  │ Home                       │
+//  │ Games                       │
+//  │ Game Details                │
+//  │ Search                      │
+//  │ Reviews                     │
+//  │ Profile                     │
+//  │ Login / Register            │
+//  │ Admin Dashboard             │
+//  └──────────────┬──────────────┘
+//                 │
+//                 │ REST API / HTTPS
+//                 ▼
+//  ┌─────────────────────────────┐
+//  │          NODE.JS            │
+//  │          BACKEND            │
+//  │                             │
+//  │ Auth Module                 │
+//  │ Users Module                │
+//  │ Games Module                │
+//  │ Reviews Module              │
+//  │ Ratings Module              │
+//  │ Genres Module               │
+//  │ Platforms Module            │
+//  │ Admin Module                │
+//  │ Search Module               │
+//  │ Upload Module               │
+//  └──────────────┬──────────────┘
+//                 │
+//                 │ Prisma ORM
+//                 ▼
+//  ┌─────────────────────────────┐
+//  │        POSTGRESQL           │
+//  │          DATABASE           │
+//  │                             │
+//  │ Users                       │
+//  │ Games                       │
+//  │ Reviews                     │
+//  │ Ratings                     │
+//  │ Genres                      │
+//  │ Platforms                   │
+//  │ ...                         │
+//  └─────────────────────────────┘
 
 
 

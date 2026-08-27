@@ -2,6 +2,55 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+.dark {
+  --background: #171717;
+  --foreground: #ffffff;
+}
+
+
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev {
+  color: white;
+  z-index: 50;
+}
+
+.hero-swiper .swiper-button-next::after,
+.hero-swiper .swiper-button-prev::after {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+.hero-swiper .swiper-pagination {
+  z-index: 50;
+  bottom: 20px !important;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+  background: white;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: white;
+}
+
+
+.hero-button-disabled {
+    opacity: 0.3;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -127,6 +176,20 @@
   html {
     @apply font-sans;
   }
+}
+
+
+
+.hero-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  opacity: 0.5;
+  background: white;
+}
+
+.hero-pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 

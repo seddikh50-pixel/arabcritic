@@ -7,7 +7,7 @@ const getReview = (review: number | null): [string, string] => {
     return ["bg-gradient-to-br from-blue-400 to-blue-600", "تجربة استثنائية"];
 
   if (review >= 80)
-    return ["bg-gradient-to-br from-green-300 to-green-500", "تجربة موصى بها"];
+    return ["bg-gradient-to-br from-green-300 to-green-600", "تجربة موصى بها"];
 
   if (review >= 70)
     return ["bg-gradient-to-br from-yellow-300 to-yellow-500", "تجربة مقبولة"];
