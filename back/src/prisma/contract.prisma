@@ -1,0 +1,65 @@
+// use prisma-next
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  name      String?
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Game {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String?
+  cover       String?
+  releaseDate TimestamptzString?
+  developer   String?
+  publisher   String?
+  banner      String? 
+  reviews Review[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Reviewer {
+  id      String   @id @default(uuid())
+  name    String
+  slug    String   @unique
+  avatar  String?
+  bio     String?
+  website String?
+
+  reviews Review[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  title       String
+  content     String?
+  score       Int?
+  url         String?
+  publishedAt TimestamptzString?
+
+  game        Game     @relation(fields: [gameId], references: [id])
+  gameId      String
+
+  reviewer    Reviewer @relation(fields: [reviewerId], references: [id])
+  reviewerId  String
+
+  createdAt TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
+
+  @@unique([gameId, reviewerId])
+  @@index([gameId])
+  @@index([reviewerId])
+}
+
+

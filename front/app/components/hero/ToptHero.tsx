@@ -37,7 +37,7 @@ export default function Hero() {
     ]
 
     return (
-        <div className="relative xl:h-130 lg:h-130 h-200 w-full  border-[1px] rounded-md overflow-hidden">
+        <div className="relative xl:h-130 lg:h-130  h-220 md:h-250 w-full  border-[1px] rounded-md overflow-hidden">
 
 
 
@@ -49,7 +49,7 @@ export default function Hero() {
                 navigation={{
                     nextEl: ".hero-next",
                     prevEl: ".hero-prev",
-                        disabledClass: "hero-button-disabled",
+                    disabledClass: "hero-button-disabled",
 
                 }}
                 pagination={{
@@ -99,7 +99,7 @@ export default function Hero() {
                                     <div className="flex h-full flex-col justify-center px-5 py-4 md:px-8">
 
                                         {/* Header */}
-                                        <div className="mb-4 md:mb-8">
+                                        <div className="mb-4 md:mb-2 xl:mb-8 lg:mb-8">
                                             <span className="text-[10px] font-semibold tracking-[0.3em] text-gray-500">
                                                 ARABCRITIC
                                             </span>
@@ -113,7 +113,7 @@ export default function Hero() {
                                             </p>
                                         </div>
 
-                                        <div className="mb-4 h-px w-full bg-gray-800 md:mb-8" />
+                                        <div className="mb-1  w-full bg-gray-800 md:mb-2 xl:mb-8 lg:mb-8    " />
 
                                         {/* Game + Score */}
                                         <div className="flex items-center justify-between gap-4">
@@ -123,11 +123,11 @@ export default function Hero() {
                                                     تقييم النقاد
                                                 </p>
 
-                                                <h4 className="truncate text-sm font-bold text-white">
+                                                <h4 className=" whitespace-nowrap     text-sm font-bold text-white">
                                                     {game.name}
                                                 </h4>
 
-                                                <p className="mt-1 text-sm text-gray-400 md:mt-2">
+                                                <p className="mt-1 text-sm text-gray-400 md:mt-2 xl:mb-8 lg:mb-8">
                                                     {label}
                                                 </p>
                                             </div>
@@ -138,12 +138,12 @@ export default function Hero() {
 
                                                 <div
                                                     className={`
-                                ${color}
-                                flex h-14 w-14 items-center justify-center
-                                rounded-xl text-2xl font-black text-white
-                                shadow-2xl
-                                md:h-20 md:w-20 md:rounded-2xl md:text-3xl
-                            `}
+                                                     ${color}
+                                                     flex h-14 w-14 items-center justify-center
+                                                     rounded-xl text-2xl font-black text-white
+                                                     shadow-2xl
+                                                    md:h-20 md:w-20 md:rounded-2xl md:text-3xl
+                                                 `}
                                                 >
                                                     {game.review ?? "—"}
                                                 </div>
@@ -152,12 +152,12 @@ export default function Hero() {
                                         </div>
 
                                         {/* Impression */}
-                                        <div className="mt-4 md:mt-8">
+                                        <div className="mt-2 md:mt-2 sm:mt-2">
                                             <div className="flex items-center gap-3">
 
                                                 <div className={`h-8 w-1 rounded-full ${color} md:h-10`} />
 
-                                                <div>
+                                                <div className="md:mb-3">
                                                     <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">
                                                         الانطباع العام
                                                     </p>
@@ -169,6 +169,13 @@ export default function Hero() {
 
                                             </div>
                                         </div>
+
+                                        <button
+                                            type="button"
+                                            className="xl:mt-10 mt-4   cursor-pointer  w-1/4 xl:w-full lg:w-full  rounded-lg border border-white/10 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                                        >
+                                            عرض المزيد
+                                        </button>
 
                                     </div>
                                 </div>
@@ -183,13 +190,13 @@ export default function Hero() {
                                     />
                                     <div
                                         className="
-        absolute right-0 top-0 z-10
-        h-full w-24
-        bg-gradient-to-r
-        from-transparent
-        via-black/60
-        to-black
-    "
+                                          absolute right-0 top-0 z-10
+                                          h-full w-24
+                                          bg-gradient-to-r
+                                          from-transparent
+                                          via-black/60
+                                          to-black
+                                      "
                                     />
 
                                     {/* Gradient */}
@@ -210,14 +217,14 @@ export default function Hero() {
                 })}
 
                 {/* Navigation */}
-                <div className="absolute bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center ">
+                <div className="absolute bottom-5 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center                                   ">
                     {/* Right / Next */}
                     <button
                         type="button"
                         className="hero-next flex h-10 w-18 cursor-pointer items-center justify-center rounded-full bg-black/60 text-xl text-white transition hover:bg-black/80"
                         aria-label="Next slide"
                     >
-                          <ChevronRight size={22} strokeWidth={2} />
+                        <ChevronRight size={22} strokeWidth={2} />
 
                     </button>
 
@@ -230,7 +237,7 @@ export default function Hero() {
                         className="hero-prev flex h-10 w-18 cursor-pointer items-center justify-center rounded-full bg-black/60 text-xl text-white transition hover:bg-black/80"
                         aria-label="Previous slide"
                     >
-                          <ChevronLeft size={22} strokeWidth={2} />
+                        <ChevronLeft size={22} strokeWidth={2} />
 
                     </button>
 

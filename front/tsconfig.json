@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/components/hero"  ],
+, "app/components/hero", "app/admin/games"  ],
   "exclude": ["node_modules"]
 }
