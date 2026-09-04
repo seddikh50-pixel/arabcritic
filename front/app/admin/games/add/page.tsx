@@ -2,6 +2,7 @@
 
 "use client";
 
+import { enqueueSnackbar } from "notistack";
 import { FormEvent, useState } from "react";
 
 export default function NewGamePage() {
@@ -30,22 +31,34 @@ export default function NewGamePage() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const formElement = e.currentTarget;
+
     setLoading(true);
     setMessage("");
 
     const form = new FormData(e.currentTarget);
 
-    for (const one of form.entries()) {
-      console.log(one);
-    }
+ 
 
     try {
-      const response = await fetch("http://localhost:5000/game/add", {
+      const response = await fetch("http://localhost:5000/api/game/add", {
         method: "POST",
         body: form,
       });
 
       const result = await response.json();
+      if (!result.success) {
+        enqueueSnackbar(result.message, {
+          variant: "error",
+        });
+
+      }else{
+         enqueueSnackbar(result.message, {
+          variant: "success",
+        });
+      }
+
+      console.log(result);
 
       if (!response.ok) {
         throw new Error(result.message || "حدث خطأ");
@@ -53,7 +66,8 @@ export default function NewGamePage() {
 
       setMessage("تمت إضافة اللعبة بنجاح");
 
-      e.currentTarget.reset();
+      formElement.reset();
+
 
       setCoverPreview(null);
       setBannerPreview(null);
@@ -69,6 +83,11 @@ export default function NewGamePage() {
       setLoading(false);
     }
   }
+
+
+  const handleClick = () => {
+
+  };
 
   return (
     <main className="max-w-3xl mx-auto p-6" dir="rtl">
@@ -229,6 +248,9 @@ export default function NewGamePage() {
           </p>
         )}
       </form>
+      <button onClick={handleClick}>
+        Create Game
+      </button>
     </main>
   );
 }

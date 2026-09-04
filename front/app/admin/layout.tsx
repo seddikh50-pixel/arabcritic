@@ -1,17 +1,28 @@
+import React from "react";
+import Providers from "../utils/Providers";
+import SideBar from "../components/admin/SideBar";
+import Header from "../components/admin/Header";
+
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div>
-      <aside>
-        Admin Sidebar
-      </aside>
+    <Providers>
+      <div className="min-h-screen bg-gray-100">
 
-      <main>
-        {children}
-      </main>
-    </div>
+        <SideBar />
+
+        <div className="mr-64">
+          <Header />
+
+          <main className="p-6">
+            {children}
+          </main>
+        </div>
+
+      </div>
+    </Providers>
   );
 }
