@@ -29,7 +29,7 @@ export default async function Page({ searchParams }: Props) {
     const q = params.q ?? "";
     const page = Number(params.page ?? "1");
 
-    const { games, total } = await getGames({ q, page });
+    const { games, total } = await getGames( q, page );
 
 
     return (

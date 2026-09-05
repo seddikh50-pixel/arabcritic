@@ -11,10 +11,10 @@ type GetGamesResponse = {
     total: number;
 };
 
-export async function getGames({
+export async function getGames(
     q = "",
     page = 1,
-}: GetGamesParams): Promise<GetGamesResponse> {
+): Promise<GetGamesResponse> {
     const response = await fetch(
         `http://localhost:5000/api/game/games?q=${encodeURIComponent(q)}&page=${page}`,
         {
