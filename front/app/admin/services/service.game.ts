@@ -1,68 +1,71 @@
 
+import type { Game } from "@/types/game";
 
-import { enqueueSnackbar } from "notistack";
-
-import { Game } from "@/types/game";
-export const getGames = async (
-    search: string,
-    page: number,
-    setCount: React.Dispatch<React.SetStateAction<number>>,
-    setGames: React.Dispatch<React.SetStateAction<Game[]>>
-) => {
-    try {
-        const params = new URLSearchParams();
-        if (search) {
-            params.set("q", search);
-        }
-
-        params.set("page", String(page));
-        const response = await fetch(
-            `http://localhost:5000/api/game/games?${params.toString()}`
-        );
-
-        const result = await response.json();
-        setCount(result.total)
-        console.log(result.total);
-
-        setGames(result.data);
-    } catch (error) {
-        console.error(error);
-    }
+type GetGamesParams = {
+    q?: string;
+    page?: number;
 };
 
+type GetGamesResponse = {
+    games: Game[];
+    total: number;
+};
 
-
-
-export const deleteGame = async (id: string
-) => {
+export async function getGames({
+    q = "",
+    page = 1,
+}: GetGamesParams): Promise<GetGamesResponse> {
     const response = await fetch(
-        `http://localhost:5000/api/game/delete/${id}`,
+        `http://localhost:5000/api/game/games?q=${encodeURIComponent(q)}&page=${page}`,
         {
-            method: "DELETE",
+            cache: "no-store",
         }
     );
 
-    const result = await response.json();
-    console.log(result);
-
-    if (!result.success) {
-        enqueueSnackbar(result.message, {
-            variant: "error",
-        });
-    } else {
-        enqueueSnackbar(result.message, {
-            variant: "success",
-        });
-    
-     
-
-       
-    }
-
-
     if (!response.ok) {
-        throw new Error("فشل حذف اللعبة");
+        const errorText = await response.text();
+
+        console.error("Games API Error:", errorText);
+
+        throw new Error("فشل في جلب الألعاب");
     }
 
-  
-};
+    return response.json();
+}
+
+
+
+
+
+// export const deleteGame = async (id: string
+// ) => {
+//     const response = await fetch(
+//         `http://localhost:5000/api/game/delete/${id}`,
+//         {
+//             method: "DELETE",
+//         }
+//     );
+
+//     const result = await response.json();
+
+//     if (!result.success) {
+//         enqueueSnackbar(result.message, {
+//             variant: "error",
+//         });
+//     } else {
+//         enqueueSnackbar(result.message, {
+//             variant: "success",
+//         });
+
+
+
+
+//     }
+
+
+//     if (!response.ok) {
+//         throw new Error("فشل حذف اللعبة");
+//     }
+
+
+// };

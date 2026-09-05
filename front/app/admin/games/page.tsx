@@ -9,24 +9,12 @@ import { Game } from "@/types/game";
 import { Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Platforms } from "@/app/components/admin/Platforms";
 import { Genres } from "@/app/components/admin/Genres";
 import { Reviews } from "@/app/components/admin/Review";
 import GameSearch from "@/app/components/admin/GameSearch";
-import { deleteGame } from "../services/service.game";
 import DeleteGameButton from "@/app/components/admin/DeleteGameButton";
+import { getGames } from "../services/service.game";
 
 type Props = {
     searchParams: Promise<{
@@ -41,28 +29,8 @@ export default async function Page({ searchParams }: Props) {
     const q = params.q ?? "";
     const page = Number(params.page ?? "1");
 
-    const response = await fetch(
-        `http://localhost:5000/api/game/games?q=${encodeURIComponent(q)}&page=${page}`,
-        {
-            cache: "no-store",
-        }
-    );
+    const { games, total } = await getGames({ q, page });
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Games API Error:", errorText);
-
-        throw new Error("فشل في جلب الألعاب");
-    }
-
-    const data: {
-        games: Game[];
-        total: number;
-    } = await response.json();
-
-    const { games, total } = data;
-
-    console.log(total);
 
     return (
 
