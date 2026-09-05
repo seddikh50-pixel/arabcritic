@@ -8,6 +8,14 @@
       "model": "Game",
       "namespace": "public"
     },
+    "gamePlatform": {
+      "model": "GamePlatform",
+      "namespace": "public"
+    },
+    "platform": {
+      "model": "Platform",
+      "namespace": "public"
+    },
     "review": {
       "model": "Review",
       "namespace": "public"
@@ -106,6 +114,21 @@
               }
             },
             "relations": {
+              "platforms": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "gameId"
+                  ]
+                },
+                "to": {
+                  "model": "GamePlatform",
+                  "namespace": "public"
+                }
+              },
               "reviews": {
                 "cardinality": "1:N",
                 "on": {
@@ -160,6 +183,145 @@
               },
               "namespaceId": "public",
               "table": "game"
+            }
+          },
+          "GamePlatform": {
+            "fields": {
+              "gameId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "platformId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "game": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "gameId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Game",
+                  "namespace": "public"
+                }
+              },
+              "platform": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "platformId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Platform",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "gameId": {
+                  "column": "gameId"
+                },
+                "platformId": {
+                  "column": "platformId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "gamePlatform"
+            }
+          },
+          "Platform": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "name": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "slug": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "games": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "platformId"
+                  ]
+                },
+                "to": {
+                  "model": "GamePlatform",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "name": {
+                  "column": "name"
+                },
+                "slug": {
+                  "column": "slug"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "platform"
             }
           },
           "Review": {
@@ -568,6 +730,126 @@
                 }
               ]
             },
+            "gamePlatform": {
+              "columns": {
+                "gameId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "platformId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "gameId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gamePlatform"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "game"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "platformId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "gamePlatform"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "platform"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "gameId"
+                  ],
+                  "name": "gamePlatform_gameId_idx_6cdb47f8",
+                  "prefix": "gamePlatform_gameId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "platformId"
+                  ],
+                  "name": "gamePlatform_platformId_idx_79bf329b",
+                  "prefix": "gamePlatform_platformId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "gameId",
+                  "platformId"
+                ]
+              },
+              "uniques": []
+            },
+            "platform": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "name": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "slug": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "slug"
+                  ]
+                }
+              ]
+            },
             "review": {
               "columns": {
                 "content": {
@@ -816,10 +1098,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6a7f386952f82adbabdb29a1ecf71f26eeb34183335208549c6f71f638058079"
+    "storageHash": "cea59db7f0c74b0b25db65b873dede008956778f3d78ac3da47e6789f6c36ca6"
   },
   "execution": {
-    "executionHash": "da4ebf09f48b50029097ce7028ec6e4dfa99ed2ea38bdfa992a901023c2050de",
+    "executionHash": "7465be1e978ee01cde23d24394c7347c5876420e5bba08aa7f40a5d618e4f810",
     "mutations": {
       "defaults": [
         {
@@ -846,6 +1128,32 @@
             "column": "updatedAt",
             "namespace": "public",
             "table": "game"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "platform"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "platform"
           }
         },
         {

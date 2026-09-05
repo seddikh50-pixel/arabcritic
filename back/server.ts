@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { db } from "./src/prisma/db.js";
 import gameRouter from "./game/game.routes";
+import platformRouter from "./platform/platform.routes.js";
+
 import cloudinary from "./src/cloudinary.js";
 
 dotenv.config();
@@ -15,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/game", gameRouter);
+app.use("/api/platform", platformRouter);
 
 
 

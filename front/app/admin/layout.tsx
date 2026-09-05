@@ -17,7 +17,7 @@ export default function AdminLayout({
         <div className="mr-64">
           <Header />
 
-          <main className="p-6">
+          <main className="p-2">
             {children}
           </main>
         </div>

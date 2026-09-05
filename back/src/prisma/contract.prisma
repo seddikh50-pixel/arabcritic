@@ -1,4 +1,5 @@
-// use prisma-next
+
+
 
 model User {
   id        String   @id @default(uuid())
@@ -19,11 +20,34 @@ model Game {
   releaseDate TimestamptzString?
   developer   String?
   publisher   String?
-  banner      String? 
-  reviews Review[]
+  banner      String?
+
+  reviews     Review[]
+  platforms   GamePlatform[]
+
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
+}
+
+model Platform {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+
+  games     GamePlatform[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
+}
+
+model GamePlatform {
+  gameId     String
+  platformId String
+
+  game       Game     @relation(fields: [gameId], references: [id])
+  platform   Platform @relation(fields: [platformId], references: [id])
+
+  @@id([gameId, platformId])
 }
 
 model Reviewer {
@@ -61,5 +85,7 @@ model Review {
   @@index([gameId])
   @@index([reviewerId])
 }
+
+
 
 

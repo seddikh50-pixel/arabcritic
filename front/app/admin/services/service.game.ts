@@ -1,4 +1,5 @@
 
+
 import { enqueueSnackbar } from "notistack";
 
 import { Game } from "@/types/game";
@@ -21,7 +22,7 @@ export const getGames = async (
 
         const result = await response.json();
         setCount(result.total)
-        console.log(result);
+        console.log(result.total);
 
         setGames(result.data);
     } catch (error) {
@@ -32,7 +33,7 @@ export const getGames = async (
 
 
 
-export const deleteGame = async (id: string, setGames: React.Dispatch<React.SetStateAction<Game[]>>
+export const deleteGame = async (id: string
 ) => {
     const response = await fetch(
         `http://localhost:5000/api/game/delete/${id}`,
@@ -52,10 +53,10 @@ export const deleteGame = async (id: string, setGames: React.Dispatch<React.SetS
         enqueueSnackbar(result.message, {
             variant: "success",
         });
+    
+     
 
-        setGames((prevGames) =>
-            prevGames.filter((game) => game.id !== id)
-        );
+       
     }
 
 

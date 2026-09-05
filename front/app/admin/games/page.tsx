@@ -1,11 +1,14 @@
-"use client";
+
+
+
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { Game } from "@/types/game";
 import Pagination from "@/app/components/admin/Pagination";
-import { deleteGame, getGames } from "../services/service.game";
+import { Game } from "@/types/game";
 
+import { Pencil, Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 import {
     AlertDialog,
@@ -17,156 +20,267 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Pencil, Trash2 } from "lucide-react";
+} from "@/components/ui/alert-dialog";
+import { Platforms } from "@/app/components/admin/Platforms";
+import { Genres } from "@/app/components/admin/Genres";
+import { Reviews } from "@/app/components/admin/Review";
+import GameSearch from "@/app/components/admin/GameSearch";
+import { deleteGame } from "../services/service.game";
+import DeleteGameButton from "@/app/components/admin/DeleteGameButton";
 
+type Props = {
+    searchParams: Promise<{
+        q?: string;
+        page?: string;
+    }>;
+};
 
-export default function page() {
-    const [games, setGames] = useState<Game[]>([]);
-    const [search, setSearch] = useState("");
-    const [page, setPage] = useState(1);
-    const [count, setCount] = useState<number>(0);
-    useEffect(() => {
-        getGames(search, page, setCount, setGames);
-    }, [search, page]);
+export default async function Page({ searchParams }: Props) {
+    const params = await searchParams;
 
+    const q = params.q ?? "";
+    const page = Number(params.page ?? "1");
 
+    const response = await fetch(
+        `http://localhost:5000/api/game/games?q=${encodeURIComponent(q)}&page=${page}`,
+        {
+            cache: "no-store",
+        }
+    );
 
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Games API Error:", errorText);
+
+        throw new Error("فشل في جلب الألعاب");
+    }
+
+    const data: {
+        games: Game[];
+        total: number;
+    } = await response.json();
+
+    const { games, total } = data;
+
+    console.log(total);
 
     return (
-        <div className="p-5">
-            <h1 className="text-4xl font-bold">قائمة الألعاب</h1>
 
-            {/* Search */}
 
-            <div className="flex">
-                <input
+        <div className="p-2">
+
+            {/* ================= العنوان ================= */}
+            <h1 className="mb-5 text-4xl font-bold">
+                قائمة الألعاب
+            </h1>
+
+            {/* ================= البحث والفلاتر ================= */}
+            <form
+                method="GET"
+                className="flex gap-5"
+            >
+                {/* Search */}
+                {/* <input
                     type="text"
-                    placeholder="Search games..."
-                    value={search}
-                    onChange={(e) => {
-                        setSearch(e.target.value);
-                        setPage(1);
-                    }}
-                    className="border p-2"
-                />
-                <div>المنصة</div>
-                <div>التصنيف</div>
-                <div>التقييم</div>
-            </div>
+                    name="q"
+                    defaultValue={q}
+                    placeholder="البحث عن الألعاب..."
+                    className="rounded-md border-2 border-gray-400 px-2 py-1"
+                /> */}
+                <GameSearch />
 
-            {/* Games */}
-
-            <div className="mt-5 overflow-hidden rounded-lg border border-gray-200 bg-white">
-                {/* Header */}
-                <div className="grid grid-cols-[80px_180px_120px_120px_120px_120px_120px_1fr] gap-4 border-b bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-600">
-                    <div>الغلاف</div>
-                    <div>اللعبة</div>
-                    <div>المنصة</div>
-                    <div>التصنيف</div>
-                    <div>تقييم النقاد</div>
-                    <div>تقييم المستخدمين</div>
-                    <div>تاريخ الاصدار </div>
-                    <div>الاجرات</div>
+                {/* Platform */}
+                <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
+                    <Platforms />
                 </div>
 
-                {/* Games */}
-                {games.map((game) => (
-                    <div
-                        key={game.id}
-                        className="grid grid-cols-[80px_180px_120px_120px_120px_1fr] items-center gap-4 border-b px-5 py-3 transition hover:bg-gray-50"
-                    >
-                        {/* Cover */}
-                        <div>
-                            {game.cover ? (
-                                <Image
-                                    src={game.cover}
-                                    alt={game.title}
-                                    width={50}
-                                    height={70}
-                                    className="h-[70px] w-[50px] rounded object-cover"
-                                />
-                            ) : (
-                                <div className="flex h-[70px] w-[50px] items-center justify-center rounded bg-gray-200 text-xs text-gray-500">
-                                    N/A
-                                </div>
-                            )}
-                        </div>
+                {/* Genre */}
+                <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
+                    <Genres />
+                </div>
 
-                        {/* Game */}
-                        <div>
-                            <h2 className="font-semibold text-gray-900">
-                                {game.title}
-                            </h2>
+                {/* Reviews */}
+                <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
+                    <Reviews />
+                </div>
 
-                            {/* 
-                            <p className="mt-1 text-sm text-gray-500">
-                                {game.slug}
-                            </p> */}
-                        </div>
-                        <div>
-                            PC
-                        </div>
-                        <div>
-                            RPG
-                        </div>
+                <Button
+                    type="submit"
+                    className="rounded-md bg-green-600 px-5 hover:bg-green-700"
+                >
+                    بحث
+                </Button>
+            </form>
 
-                        {/* Release Date */}
-                        <div className="text-sm text-gray-500">
-                            {game.releaseDate
-                                ? new Date(game.releaseDate).toLocaleDateString()
-                                : "—"}
-                        </div>
+            {/* ================= Games ================= */}
+            <div className="mt-5 overflow-hidden rounded-lg border border-gray-200 bg-white">
 
-                        {/* Actions */}
-                        <div className="flex gap-2">
-                            <button className="rounded-sm flex justify-center items-center gap-2 bg-blue-600    px-3 py-1.5 text-sm text-white hover:bg-gray-700">
-                                <Pencil size={15} />
-                                تعديل
+                {/* ================= Header ================= */}
+                <div className="grid grid-cols-[80px_180px_120px_120px_120px_120px_120px_1fr] gap-4 border-b bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-600">
 
-                            </button>
-
-
-                            <AlertDialog>
-                                <AlertDialogTrigger render={<Button variant="destructive" className={"flex rounded-sm justify-center items-center text-white bg-red-600"}>
-                                    <Trash2 />
-                                    حذف
-                                </Button>} />
-
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            هل أنت متأكد من حذف هذه اللعبة؟
-                                        </AlertDialogTitle>
-
-                                        <AlertDialogDescription>
-                                            لا يمكن التراجع عن هذا الإجراء. سيتم حذف اللعبة نهائيًا.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-
-                                    <AlertDialogFooter >
-
-
-                                        <AlertDialogAction className={"  bg-green-500"}
-                                            onClick={() => deleteGame(game.id, setGames)}
-                                        >
-                                            حذف
-                                        </AlertDialogAction>
-                                        <AlertDialogCancel >
-                                            إلغاء
-                                        </AlertDialogCancel>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </div>
+                    <div>
+                        الغلاف
                     </div>
-                ))}
+
+                    <div>
+                        اللعبة
+                    </div>
+
+                    <div>
+                        المنصة
+                    </div>
+
+                    <div>
+                        التصنيف
+                    </div>
+
+                    <div>
+                        تقييم النقاد
+                    </div>
+
+                    <div>
+                        تقييم المستخدمين
+                    </div>
+
+                    <div>
+                        تاريخ الإصدار
+                    </div>
+
+                    <div>
+                        الإجراءات
+                    </div>
+
+                </div>
+
+                {/* ================= Games ================= */}
+                <div className="h-100 w-full overflow-y-auto">
+
+                    {games.length === 0 ? (
+
+                        <div className="py-10 text-center text-gray-500">
+                            لا توجد ألعاب
+                        </div>
+
+                    ) : (
+
+                        games.map((game) => (
+
+                            <div
+                                key={game.id}
+                                className="grid grid-cols-[80px_180px_120px_120px_120px_120px_120px_1fr] items-center gap-4 border-b px-5 py-1 transition last:border-b-0 hover:bg-gray-50"
+                            >
+
+                                {/* ================= الغلاف ================= */}
+                                <div>
+
+                                    {game.cover ? (
+
+                                        <Image
+                                            src={game.cover}
+                                            alt={game.title}
+                                            width={50}
+                                            height={70}
+                                            className="h-[70px] w-[50px] rounded object-cover"
+                                        />
+
+                                    ) : (
+
+                                        <div className="flex h-[70px] w-[50px] items-center justify-center rounded bg-gray-200 text-xs text-gray-500">
+                                            N/A
+                                        </div>
+
+                                    )}
+
+                                </div>
+
+                                {/* ================= اللعبة ================= */}
+                                <div>
+
+                                    <h2 className="font-semibold text-gray-900">
+                                        {game.title}
+                                    </h2>
+
+                                    <p className="mt-1 text-xs text-gray-500">
+                                        {game.developer ?? "غير محدد"}
+                                    </p>
+
+                                </div>
+
+                                {/* ================= المنصة ================= */}
+                                <div className="text-sm text-gray-600">
+                                    PC
+                                </div>
+
+                                {/* ================= التصنيف ================= */}
+                                <div className="text-sm text-gray-600">
+                                    RPG
+                                </div>
+
+                                {/* ================= تقييم النقاد ================= */}
+                                <div>
+
+                                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                                        9.3
+                                    </span>
+
+                                </div>
+
+                                {/* ================= تقييم المستخدمين ================= */}
+                                <div>
+
+                                    <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
+                                        8.2
+                                    </span>
+
+                                </div>
+
+                                {/* ================= تاريخ الإصدار ================= */}
+                                <div className="text-sm text-gray-500">
+
+                                    {game.releaseDate
+                                        ? new Date(game.releaseDate).toLocaleDateString()
+                                        : "—"}
+
+                                </div>
+
+                                {/* ================= الإجراءات ================= */}
+                                <div className="flex gap-2">
+
+                                    {/* تعديل */}
+                                    <Button
+                                        variant="outline"
+                                        className="flex items-center justify-center gap-2 rounded-sm bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
+                                    >
+                                        <Pencil size={15} />
+                                        تعديل
+                                    </Button>
+
+                                    {/* حذف */}
+                                   <DeleteGameButton gameId={game.id} />
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                    )}
+
+                </div>
+
             </div>
 
-
-            <Pagination count={count} setPage={setPage} />
+            {/* ================= Pagination ================= */}
+            <Pagination
+                total={total}
+                currentPage={page}
+            />
 
         </div>
+
+
+
+
     );
 }
+

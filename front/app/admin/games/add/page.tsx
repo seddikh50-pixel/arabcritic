@@ -38,7 +38,7 @@ export default function NewGamePage() {
 
     const form = new FormData(e.currentTarget);
 
- 
+
 
     try {
       const response = await fetch("http://localhost:5000/api/game/add", {
@@ -47,22 +47,21 @@ export default function NewGamePage() {
       });
 
       const result = await response.json();
-      if (!result.success) {
-        enqueueSnackbar(result.message, {
+      if (!response.ok || !result.success) {
+        enqueueSnackbar(result.message || "حدث خطأ", {
           variant: "error",
         });
 
-      }else{
-         enqueueSnackbar(result.message, {
-          variant: "success",
-        });
+        return;
       }
+
+      enqueueSnackbar(result.message, {
+        variant: "success",
+      });
 
       console.log(result);
 
-      if (!response.ok) {
-        throw new Error(result.message || "حدث خطأ");
-      }
+    
 
       setMessage("تمت إضافة اللعبة بنجاح");
 

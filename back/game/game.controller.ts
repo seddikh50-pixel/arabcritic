@@ -51,7 +51,7 @@ function uploadToCloudinary(
     });
 }
 
-
+ /////////////////////////////////////////////////////////////////////////////////////////////////create game 
 
 export async function createGame(req: Request, res: Response) {
     try {
@@ -150,7 +150,7 @@ export async function createGame(req: Request, res: Response) {
 
 
 
-///////////////////////////////////get single game 
+////////////////////////////////////////////////////////////////////////////////get single game 
 
 export async function getGames(req: Request, res: Response) {
 
@@ -160,30 +160,33 @@ export async function getGames(req: Request, res: Response) {
 
         const limit = 5;
         const skip = (Number(page) - 1) * limit;
-        let games;
+        let query = db.orm.public.Game;
+   
         if (q) {
-            games = await db.orm.public.Game
-                .where((game) =>
-                    game.title.ilike(`%${q}%`)
-                ).limit(limit).offset(skip)
-                .all();
-
-        } else {
-            games = await db.orm.public.Game.
-                limit(limit).offset(skip)
-                .all();
+            query = query.where((game) =>
+                game.title.ilike(`%${q}%`)
+            );
         }
 
-        const totalGames = await Math.ceil((await db.orm.public.Game.aggregate((a) => ({ total: a.count() }))).total / 5)
+        const games = await query
+            .limit(limit)
+            .offset(skip)
+            .all();
 
+        const total = (
+            await query.aggregate((a) => ({
+                total: a.count()
+            }))
+        ).total;
 
+        const totalPages = Math.ceil(total / limit);
 
 
 
         return res.status(200).json({
             success: true,
-            data: games,
-            total: totalGames,
+            games: games,
+            total: totalPages,
         });
     } catch (error) {
         console.error(error);
@@ -194,6 +197,9 @@ export async function getGames(req: Request, res: Response) {
         });
     }
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////get game by slug 
 
 export async function getGameBySlug(req: Request, res: Response) {
     try {
@@ -224,6 +230,8 @@ export async function getGameBySlug(req: Request, res: Response) {
         });
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////update game 
 
 export async function updateGame(req: Request, res: Response) {
     try {
@@ -283,6 +291,9 @@ export async function updateGame(req: Request, res: Response) {
         });
     }
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////delete game
 
 export async function deleteGame(req: Request, res: Response) {
     try {

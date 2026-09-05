@@ -1,0 +1,284 @@
+[
+  {
+    "id": "table.gamePlatform",
+    "label": "Create table \"gamePlatform\"",
+    "summary": "Creates table \"gamePlatform\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "gamePlatform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"gamePlatform\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gamePlatform\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"gamePlatform\"",
+        "sql": "CREATE TABLE \"public\".\"gamePlatform\" (\n  \"gameId\" text NOT NULL,\n  \"platformId\" text NOT NULL,\n  PRIMARY KEY (\"gameId\", \"platformId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"gamePlatform\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gamePlatform\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.platform",
+    "label": "Create table \"platform\"",
+    "summary": "Creates table \"platform\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "platform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"platform\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"platform\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"platform\"",
+        "sql": "CREATE TABLE \"public\".\"platform\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"slug\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"platform\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"platform\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.platform.platform_slug_key",
+    "label": "Add unique constraint on \"platform\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "platform_slug_key",
+        "table": "platform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"platform_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "platform_slug_key",
+          "public",
+          "\"public\".\"platform\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"platform_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"platform\" ADD CONSTRAINT \"platform_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"platform_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "platform_slug_key",
+          "public",
+          "\"public\".\"platform\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gamePlatform.gamePlatform_gameId_idx_6cdb47f8",
+    "label": "Create index \"gamePlatform_gameId_idx_6cdb47f8\" on \"gamePlatform\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gamePlatform_gameId_idx_6cdb47f8",
+        "table": "gamePlatform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gamePlatform_gameId_idx_6cdb47f8\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gamePlatform_gameId_idx_6cdb47f8\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gamePlatform_gameId_idx_6cdb47f8\"",
+        "sql": "CREATE INDEX \"gamePlatform_gameId_idx_6cdb47f8\" ON \"public\".\"gamePlatform\" (\"gameId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gamePlatform_gameId_idx_6cdb47f8\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gamePlatform_gameId_idx_6cdb47f8\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.gamePlatform.gamePlatform_platformId_idx_79bf329b",
+    "label": "Create index \"gamePlatform_platformId_idx_79bf329b\" on \"gamePlatform\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "gamePlatform_platformId_idx_79bf329b",
+        "table": "gamePlatform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"gamePlatform_platformId_idx_79bf329b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gamePlatform_platformId_idx_79bf329b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"gamePlatform_platformId_idx_79bf329b\"",
+        "sql": "CREATE INDEX \"gamePlatform_platformId_idx_79bf329b\" ON \"public\".\"gamePlatform\" (\"platformId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"gamePlatform_platformId_idx_79bf329b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"gamePlatform_platformId_idx_79bf329b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gamePlatform.gamePlatform_gameId_fkey",
+    "label": "Add foreign key \"gamePlatform_gameId_fkey\" on \"gamePlatform\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gamePlatform_gameId_fkey",
+        "table": "gamePlatform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gamePlatform_gameId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gamePlatform_gameId_fkey",
+          "public",
+          "\"public\".\"gamePlatform\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gamePlatform_gameId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gamePlatform\"\nADD CONSTRAINT \"gamePlatform_gameId_fkey\"\nFOREIGN KEY (\"gameId\")\nREFERENCES \"public\".\"game\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gamePlatform_gameId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gamePlatform_gameId_fkey",
+          "public",
+          "\"public\".\"gamePlatform\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.gamePlatform.gamePlatform_platformId_fkey",
+    "label": "Add foreign key \"gamePlatform_platformId_fkey\" on \"gamePlatform\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "gamePlatform_platformId_fkey",
+        "table": "gamePlatform"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"gamePlatform_platformId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gamePlatform_platformId_fkey",
+          "public",
+          "\"public\".\"gamePlatform\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"gamePlatform_platformId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"gamePlatform\"\nADD CONSTRAINT \"gamePlatform_platformId_fkey\"\nFOREIGN KEY (\"platformId\")\nREFERENCES \"public\".\"platform\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"gamePlatform_platformId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "gamePlatform_platformId_fkey",
+          "public",
+          "\"public\".\"gamePlatform\""
+        ]
+      }
+    ]
+  }
+]
