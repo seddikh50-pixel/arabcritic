@@ -10,13 +10,14 @@ type GetGamesResponse = {
     games: Game[];
     total: number;
 };
+// ?q=${encodeURIComponent(q)}&page=${page}
 
 export async function getGames(
     q = "",
     page = 1,
 ): Promise<GetGamesResponse> {
     const response = await fetch(
-        `http://localhost:5000/api/game/games?q=${encodeURIComponent(q)}&page=${page}`,
+        `http://localhost:5000/api/game/games`,
         {
             cache: "no-store",
         }

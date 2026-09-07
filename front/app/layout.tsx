@@ -39,3 +39,61 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// نعم. باختصار، لحذف قاعدة Prisma Postgres القديمة وإعادة بنائها من الـmigrations:
+
+// 1. تسجيل الدخول
+// npx prisma@latest auth login
+// 2. ربط المشروع الصحيح
+// npx prisma@latest project link proj_cmtfqftbq8y6zyoe3wgwn6gu5
+// 3. معرفة قواعد البيانات
+// npx prisma@latest postgres list
+
+// خذ Database ID للقاعدة القديمة.
+
+// 4. حذف القاعدة القديمة نهائيًا
+// npx prisma@latest postgres delete DATABASE_ID
+
+// مثال:
+
+// npx prisma@latest postgres delete db_xxxxxxxxx
+// 5. إنشاء قاعدة جديدة
+// npx prisma@latest postgres create arabcritic
+
+// انسخ Connection URL الذي يعطيك إياه وضعه في .env:
+
+// DATABASE_URL="..."
+// 6. التأكد من الـmigrations
+// npx prisma@latest migration status
+// 7. تطبيق الـmigrations على القاعدة الجديدة
+// npx prisma@latest db migrate --to CONTRACT_ID
+
+// في حالتنا كان:
+
+// npx prisma@latest db migrate --to 710f9bbd3e75
+// 8. التحقق النهائي
+// npx prisma@latest migration status
+// npx prisma@latest db verify
+
+// ويجب أن ترى:
+
+// ✔ Up to date
+// ✔ Database marker and schema match contract

@@ -7,7 +7,7 @@ import slugify from "slugify";
 
 
 
- /////////////////////////////////////////////////////////////////////////////////////////////////create game 
+/////////////////////////////////////////////////////////////////////////////////////////////////create game 
 
 export async function createPlatform(req: Request, res: Response) {
     try {
@@ -16,7 +16,7 @@ export async function createPlatform(req: Request, res: Response) {
         const {
             name,
             slug
-            
+
         } = req.body;
         // const slug = slugify(title, {
         //     lower: true,
@@ -26,7 +26,7 @@ export async function createPlatform(req: Request, res: Response) {
 
 
 
-   
+
 
 
         if (!name || !slug) {
@@ -51,7 +51,7 @@ export async function createPlatform(req: Request, res: Response) {
 
 
         const createPlatform = await db.orm.public.Platform.create({
-            slug , 
+            slug,
             name
         })
 
@@ -73,4 +73,35 @@ export async function createPlatform(req: Request, res: Response) {
         });
     }
 
+}
+
+
+
+
+
+
+
+
+
+export async function getPlatforms(req: Request, res: Response) {
+
+    try {
+      
+   
+       const platforms = await db.orm.public.Platform.all()
+
+
+
+        return res.status(200).json({
+            success: true,
+            platforms,
+        });
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch games",
+        });
+    }
 }

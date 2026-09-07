@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
     createPlatform,
+    getPlatforms,
     // getGames,
     // getGameBySlug,
     // updateGame,
@@ -21,7 +22,7 @@ router.post(
     createPlatform
 );
 
-// router.get("/Platforms", getPlatforms);
+router.get("/Platforms", getPlatforms);
 
 // router.get("/:slug", getPlatformBySlug);
 

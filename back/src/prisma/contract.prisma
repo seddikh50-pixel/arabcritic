@@ -2,7 +2,7 @@
 
 
 model User {
-  id        String   @id @default(uuid())
+    id String @id @default(cuid(2))
   email     String   @unique
   username  String   @unique
   name      String?
@@ -12,7 +12,7 @@ model User {
 }
 
 model Game {
-  id          String   @id @default(uuid())
+    id String @id @default(cuid(2))
   title       String
   slug        String   @unique
   description String?
@@ -30,7 +30,7 @@ model Game {
 }
 
 model Platform {
-  id        String   @id @default(uuid())
+   id String @id @default(cuid(2))
   name      String
   slug      String   @unique
 
@@ -41,17 +41,19 @@ model Platform {
 }
 
 model GamePlatform {
+    id String @id @default(cuid(2))
   gameId     String
   platformId String
 
   game       Game     @relation(fields: [gameId], references: [id])
   platform   Platform @relation(fields: [platformId], references: [id])
 
-  @@id([gameId, platformId])
+  @@unique([gameId, platformId])
+
 }
 
 model Reviewer {
-  id      String   @id @default(uuid())
+    id String @id @default(cuid(2))
   name    String
   slug    String   @unique
   avatar  String?
@@ -65,7 +67,7 @@ model Reviewer {
 }
 
 model Review {
-  id          String   @id @default(uuid())
+    id String @id @default(cuid(2))
   title       String
   content     String?
   score       Int?
@@ -85,6 +87,9 @@ model Review {
   @@index([gameId])
   @@index([reviewerId])
 }
+
+
+
 
 
 

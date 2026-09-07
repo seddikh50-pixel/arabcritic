@@ -51,7 +51,7 @@ function uploadToCloudinary(
     });
 }
 
- /////////////////////////////////////////////////////////////////////////////////////////////////create game 
+/////////////////////////////////////////////////////////////////////////////////////////////////create game 
 
 export async function createGame(req: Request, res: Response) {
     try {
@@ -63,7 +63,16 @@ export async function createGame(req: Request, res: Response) {
             releaseDate,
             developer,
             publisher,
+            platformIds
         } = req.body;
+        const platforms = JSON.parse(platformIds)
+
+        if (!Array.isArray(platforms) || platforms.length === 0) {
+            return res.status(400).json({
+                message: "يجب اختيار منصة على الأقل",
+                success: false,
+            });
+        }
         const slug = slugify(title, {
             lower: true,
             strict: true,
@@ -122,16 +131,29 @@ export async function createGame(req: Request, res: Response) {
 
 
 
-        await db.orm.public.Game.create({
-            title,
-            slug,
-            description: description || null,
-            releaseDate: releaseDate || null,
-            developer: developer || null,
-            publisher: publisher || null,
-            cover: coverUpload.secure_url,
-            banner: bannerUpload.secure_url,
+        const game = await db.transaction(async (tx) => {
+            const game = await tx.orm.public.Game.create({
+                title,
+                slug,
+                description: description || null,
+                releaseDate: releaseDate || null,
+                developer: developer || null,
+                publisher: publisher || null,
+                cover: coverUpload.secure_url,
+                banner: bannerUpload.secure_url,
+            });
+
+            await tx.orm.public.GamePlatform.createAll(
+                platforms.map((platformId: string) => ({
+                    gameId: game.id,
+                    platformId,
+                }))
+            );
+
+            return game;
         });
+
+
 
         return res.status(201).json({
             message: "تم ضافة اللعبة بنجاح",
@@ -156,12 +178,12 @@ export async function getGames(req: Request, res: Response) {
 
     try {
         const q = req.query.q;
-        const page = req.query.page;
+        const page = req.query.page || 1;
 
         const limit = 5;
         const skip = (Number(page) - 1) * limit;
         let query = db.orm.public.Game;
-   
+
         if (q) {
             query = query.where((game) =>
                 game.title.ilike(`%${q}%`)
