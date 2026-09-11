@@ -327,7 +327,7 @@ export async function updateGame(req: Request, res: Response) {
 export async function deleteGame(req: Request, res: Response) {
     try {
         const { id } = req.params;
-        console.log(id);
+       
 
         if (Array.isArray(id)) {
             return res.status(400).json({

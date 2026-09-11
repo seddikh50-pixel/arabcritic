@@ -15,21 +15,21 @@ interface typePlat {
 }
 
 interface PropsPlat {
-  platforms: typePlat[]
+  genres: typePlat[]
 }
 
-export function PlatformsFilter({ platforms }: PropsPlat) {
+export function GenresFilter({ genres }: PropsPlat) {
   return (
-    <Select items={platforms.map((platform) => ({
-      label: platform.name,
-      value: platform.slug,
+    <Select items={genres.map((genre) => ({
+      label: genre.name,
+      value: genre.slug,
     }))} >
       <SelectTrigger className="w-full max-w-64 h-3  ">
-        <SelectValue placeholder="البحث بالمنصة" />
+        <SelectValue placeholder="البحث بالتصنيف" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {platforms.map((item) => (
+          {genres.map((item) => (
             <SelectItem key={item.name} value={item.name}>
               {item.name}
             </SelectItem>

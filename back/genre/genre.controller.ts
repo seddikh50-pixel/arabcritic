@@ -2,6 +2,10 @@
 import { Request, Response } from "express";
 import { db } from "../src/prisma/db";
 
+interface GenreParams {
+    id: string
+}
+
 
 
 export async function createGenre(req: Request, res: Response) {
@@ -13,11 +17,6 @@ export async function createGenre(req: Request, res: Response) {
             slug
 
         } = req.body;
-        console.log(name , slug);
-     
-
-
-
 
 
 
@@ -74,9 +73,9 @@ export async function createGenre(req: Request, res: Response) {
 export async function getGenres(req: Request, res: Response) {
 
     try {
-      
-   
-       const Genres = await db.orm.public.Genre.all()
+
+
+        const Genres = await db.orm.public.Genre.all()
 
 
 
@@ -93,3 +92,43 @@ export async function getGenres(req: Request, res: Response) {
         });
     }
 }
+
+
+
+
+
+export async function deleteGenre(req: Request<GenreParams>, res: Response) {
+
+    try {
+
+        const { id } = req.params
+
+        const existingGenre = await db.orm.public.Genre
+            .where({ id })
+            .first();
+
+        if (!existingGenre) {
+            return res.status(500).json({ message: "خطأ في حذف التصنيف ", success: false })
+        }
+
+
+        await db.orm.public.Genre.where({ id }).delete()
+        return res.status(200).json({ message: "تم حذف التصنيف بنجاح !", success: true })
+
+
+
+
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "فشل في تحميل التصنيفات",
+        });
+    }
+}
+
+
+
+

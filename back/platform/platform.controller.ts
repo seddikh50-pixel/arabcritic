@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { db } from "../src/prisma/db";
 
 
-
+interface GenreParams {
+    id: string
+}
 
 
 
@@ -101,3 +103,51 @@ export async function getPlatforms(req: Request, res: Response) {
         });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+export async function deletePlatform(req: Request<GenreParams>, res: Response) {
+
+    try {
+
+        const { id } = req.params
+
+        const existingPlatform = await db.orm.public.Platform
+            .where({ id })
+            .first();
+
+
+
+        if (!existingPlatform) {
+            return res.status(500).json({ message: "خطأ في حذف المنصة ", success: false })
+        }
+
+
+        await db.orm.public.Platform.where({ id }).delete()
+        return res.status(200).json({ message: "تم حذف المنصة بنجاح !", success: true })
+
+
+
+
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "فشل في تحميل التصنيفات",
+        });
+    }
+}
+
+
+
+

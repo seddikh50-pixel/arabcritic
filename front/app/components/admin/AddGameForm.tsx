@@ -258,7 +258,7 @@ const AddGameForm = ({ platforms }: PlatProps) => {
             disabled={loading}
             className="w-full rounded-lg bg-black px-6 py-3 text-white disabled:opacity-50"
           >
-            {loading ? "جاري الإضافة..." : "إضافة اللعبة"}
+            {loading ? "جاري الإضافة..." : "إضافة لعبة"}
           </button>
 
           {/* Message */}

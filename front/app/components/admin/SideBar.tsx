@@ -33,6 +33,12 @@ const SideBar = () => {
         >
           المنصات
         </a>
+                 <a
+          href="/admin/genres"
+          className="mt-2 block rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-100"
+        >
+          التصنيفات
+        </a>
       </nav>
     </aside>
   );

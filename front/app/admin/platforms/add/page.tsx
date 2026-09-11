@@ -223,7 +223,7 @@ const Page = () => {
                 dark:hover:bg-indigo-500
               "
             >
-              إضافة المنصة
+              إضافة منصة
             </button>
 
           </form>

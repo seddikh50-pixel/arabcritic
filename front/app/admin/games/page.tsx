@@ -4,12 +4,13 @@ import { Pencil } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PlatformsFilter } from "@/app/components/admin/PlatformsFilter";
-import { Genres } from "@/app/components/admin/Genres";
+import {  GenresFilter } from "@/app/components/admin/GenresFilter";
 import { Reviews } from "@/app/components/admin/Review";
 import GameSearch from "@/app/components/admin/GameSearch";
 import DeleteGameButton from "@/app/components/admin/DeleteGameButton";
 import { getGames } from "../services/service.game";
 import { getPlatforms } from "../services/service.platform";
+import { getGenres } from "../services/service.genre";
 
 type Props = {
     searchParams: Promise<{
@@ -25,7 +26,8 @@ export default async function Page({ searchParams }: Props) {
     const page = Number(params.page ?? "1");
     const { games, total } = await getGames(q, page);
     const platforms = await getPlatforms()
-    
+    const genres = await getGenres()
+
 
 
     return (
@@ -56,7 +58,7 @@ export default async function Page({ searchParams }: Props) {
 
                     {/* Genre */}
                     <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
-                        <Genres />
+                        <GenresFilter genres={genres.Genres} />
                     </div>
 
                     {/* Reviews */}

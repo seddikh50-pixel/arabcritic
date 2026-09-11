@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
     createGenre,
+    deleteGenre,
     getGenres,
     // getGames,
     // getGameBySlug,
@@ -21,6 +22,6 @@ router.get("/genres", getGenres);
 
 // router.patch("/:id", updatePlatform);
 
-// router.delete("/delete/:id", deletePlatform);
+router.delete("/delete/:id", deleteGenre);
 
 export default router;

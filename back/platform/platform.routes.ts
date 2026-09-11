@@ -2,11 +2,11 @@ import { Router } from "express";
 
 import {
     createPlatform,
+    deletePlatform,
     getPlatforms,
     // getGames,
     // getGameBySlug,
     // updateGame,
-    // deleteGame,
 } from "./platform.controller";
 
 const router = Router();
@@ -21,6 +21,6 @@ router.get("/Platforms", getPlatforms);
 
 // router.patch("/:id", updatePlatform);
 
-// router.delete("/delete/:id", deletePlatform);
+router.delete("/delete/:id", deletePlatform);
 
 export default router;

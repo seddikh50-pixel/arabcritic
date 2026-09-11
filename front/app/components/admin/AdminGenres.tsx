@@ -1,60 +1,54 @@
+
 import React from 'react'
-import DeletePlatformButton from './DeletePlatformButton'
+import DeleteGenreButton from './DeleteGenreButton'
 import Link from 'next/link'
 
-interface TypePlat {
+interface GenreType {
     id: string
     name: string
     slug: string
 }
 
-interface PropsPlat {
-    platforms: TypePlat[]
+interface GenresProps {
+    genres: GenreType[]
 }
 
-const Platforms = ({ platforms }: PropsPlat) => {
+const AdminGenres = ({ genres }: GenresProps) => {
     return (
-        <div className="p-6" dir="rtl">
-
+        <div className="p-6">
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">
-                        المنصات
+                        التصنيفات
                     </h1>
-
                     <p className="mt-1 text-sm text-gray-500">
-                        إدارة منصات الألعاب
+                        إدارة تصنيفات المحتوى
                     </p>
                 </div>
 
-                <Link href={'/admin/platforms/add'}
-                    className="
-                        rounded-lg bg-black px-4 py-2.5
-                        text-sm font-medium text-white
-                        transition hover:bg-gray-800
-                    "
+                <Link href={"/admin/genres/add"} 
+                    className="rounded-lg bg-black px-4 py-2.5 text-sm font-medium text-white
+                    transition hover:bg-gray-800"
                 >
-                    + إضافة منصة
-                </Link>
+                    + إضافة تصنيف
+                </Link >
             </div>
 
             {/* Table */}
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-
-                <table className="w-full">
-
+                <table className="w-full text-right">
                     <thead className="border-b border-gray-200 bg-gray-50">
                         <tr>
-                            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-600">
+                            <th className="px-6 py-4 text-sm font-semibold text-gray-600">
                                 #
                             </th>
 
-                            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-600">
-                                اسم المنصة
+                            <th className="px-6 py-4 text-sm font-semibold text-gray-600">
+                                اسم التصنيف
                             </th>
 
-                            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-600">
+                            <th className="px-6 py-4 text-sm font-semibold text-gray-600">
                                 Slug
                             </th>
 
@@ -65,81 +59,65 @@ const Platforms = ({ platforms }: PropsPlat) => {
                     </thead>
 
                     <tbody className="divide-y divide-gray-100">
-
-                        {platforms.map((pl, index) => (
+                        {genres.map((gen, index) => (
                             <tr
-                                key={pl.id}
+                                key={gen.id}
                                 className="transition hover:bg-gray-50"
                             >
-
                                 {/* Number */}
                                 <td className="px-6 py-4 text-sm text-gray-400">
                                     {index + 1}
                                 </td>
 
-                                {/* Platform name */}
+                                {/* Name */}
                                 <td className="px-6 py-4">
                                     <div className="font-medium text-gray-900">
-                                        {pl.name}
+                                        {gen.name}
                                     </div>
                                 </td>
 
                                 {/* Slug */}
                                 <td className="px-6 py-4">
-                                    <span
-                                        className="
-                                            rounded-md bg-gray-100
-                                            px-2.5 py-1
-                                            font-mono text-xs text-gray-600
-                                        "
-                                    >
-                                        {pl.slug}
+                                    <span className="rounded-md bg-gray-100 px-2.5 py-1 font-mono text-xs text-gray-600">
+                                        {gen.slug}
                                     </span>
                                 </td>
 
                                 {/* Actions */}
                                 <td className="px-6 py-4">
-                                    <div className="flex justify-center gap-2">
+                                    <div className="flex items-center justify-center gap-2">
 
+                                        {/* Edit */}
                                         <button
-                                            className="
-                                                rounded-lg border border-gray-200
-                                                px-3 py-2 text-sm font-medium
-                                                text-gray-700
-                                                transition
-                                                hover:border-blue-200
-                                                hover:bg-blue-50
-                                                hover:text-blue-600
-                                            "
+                                            className="rounded-lg border border-gray-200 px-3 py-2 text-sm
+                                            font-medium text-gray-700 transition
+                                            hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
                                         >
                                             تعديل
                                         </button>
 
-                                        <DeletePlatformButton platformId={pl.id} /> 
+                                        {/* Delete */}
+                                                <DeleteGenreButton genreId={gen.id} />
 
                                     </div>
                                 </td>
-
                             </tr>
                         ))}
-
                     </tbody>
-
                 </table>
 
                 {/* Empty state */}
-                {platforms.length === 0 && (
+                {genres.length === 0 && (
                     <div className="py-12 text-center">
                         <p className="text-sm text-gray-500">
-                            لا توجد منصات حالياً
+                            لا توجد تصنيفات حالياً
                         </p>
                     </div>
                 )}
-
             </div>
         </div>
     )
 }
 
-export default Platforms
+export default AdminGenres
 
