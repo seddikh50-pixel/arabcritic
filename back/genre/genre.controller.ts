@@ -1,14 +1,10 @@
+
 import { Request, Response } from "express";
 import { db } from "../src/prisma/db";
 
 
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////create game 
-
-export async function createPlatform(req: Request, res: Response) {
+export async function createGenre(req: Request, res: Response) {
     try {
 
 
@@ -17,8 +13,8 @@ export async function createPlatform(req: Request, res: Response) {
             slug
 
         } = req.body;
-      
-       console.log(name , slug);
+        console.log(name , slug);
+     
 
 
 
@@ -28,11 +24,11 @@ export async function createPlatform(req: Request, res: Response) {
         if (!name || !slug) {
             return res.status(400).json({
                 success: false,
-                message: "يرجى إدخال عنوان اللعبة والـ Slug",
+                message: "يرجى إدخال اسم التصنيف والـ Slug",
             });
         }
 
-        const existingPlatform = await db.orm.public.Platform
+        const existingPlatform = await db.orm.public.Genre
             .where({ slug })
             .first();
 
@@ -40,13 +36,13 @@ export async function createPlatform(req: Request, res: Response) {
             return res.status(409).json(
                 {
                     success: false,
-                    message: "تم اضافة المنصة من قبل ",
+                    message: "تم اضافة تصنيف من قبل ",
                 });
         }
 
 
 
-        const createPlatform = await db.orm.public.Platform.create({
+        await db.orm.public.Genre.create({
             slug,
             name
         })
@@ -57,7 +53,7 @@ export async function createPlatform(req: Request, res: Response) {
 
 
         return res.status(201).json({
-            message: "تم ضافة المنصة بنجاح",
+            message: "تم ضافة التصنيف بنجاح",
             success: true,
         });
     } catch (error) {
@@ -75,29 +71,25 @@ export async function createPlatform(req: Request, res: Response) {
 
 
 
-
-
-
-
-export async function getPlatforms(req: Request, res: Response) {
+export async function getGenres(req: Request, res: Response) {
 
     try {
       
    
-       const platforms = await db.orm.public.Platform.all()
+       const Genres = await db.orm.public.Genre.all()
 
 
 
         return res.status(200).json({
             success: true,
-            platforms,
+            Genres,
         });
     } catch (error) {
         console.error(error);
 
         return res.status(500).json({
             success: false,
-            message: "فشل في تحميل المنصات",
+            message: "فشل في تحميل التصنيفات",
         });
     }
 }

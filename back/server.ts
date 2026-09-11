@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 import { db } from "./src/prisma/db.js";
 import gameRouter from "./game/game.routes";
 import platformRouter from "./platform/platform.routes.js";
+import genreRouter from "./genre/genre.routes.js";
 
-import cloudinary from "./src/cloudinary.js";
 
-dotenv.config();
+dotenv.config()
 
 const app = express();
 
@@ -18,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/game", gameRouter);
 app.use("/api/platform", platformRouter);
+app.use("/api/genre", genreRouter);
 
 
 

@@ -1,19 +1,19 @@
-import type { Game } from "@/types/game";
+// import type { Game } from "@/types/game";
 
-export async function getGames(): Promise<Game[]> {
+// export async function getGames(): Promise<Game[]> {
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-
-
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/game/games`
-    );
+//     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
-    if (!response.ok) {
-        throw new Error("Failed to fetch games");
-    }
 
-    return response.json();
-}
+//     const response = await fetch(
+//         `${process.env.NEXT_PUBLIC_API_URL}/game/games`
+//     );
+
+
+//     if (!response.ok) {
+//         throw new Error("Failed to fetch games");
+//     }
+
+//     return response.json();
+// }

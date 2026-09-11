@@ -1,21 +1,21 @@
 import { Router } from "express";
 
 import {
-    createPlatform,
-    getPlatforms,
+    createGenre,
+    getGenres,
     // getGames,
     // getGameBySlug,
     // updateGame,
     // deleteGame,
-} from "./platform.controller";
+} from "./genre.controller";
 
 const router = Router();
 
 
 
-router.post("/add",createPlatform);
+router.post("/add",createGenre);
 
-router.get("/Platforms", getPlatforms);
+router.get("/genres", getGenres);
 
 // router.get("/:slug", getPlatformBySlug);
 

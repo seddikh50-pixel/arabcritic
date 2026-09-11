@@ -66,6 +66,12 @@ export async function createGame(req: Request, res: Response) {
             platformIds
         } = req.body;
         const platforms = JSON.parse(platformIds)
+        console.log(       title,
+            description,
+            releaseDate,
+            developer,
+            publisher,
+            platformIds);
 
         if (!Array.isArray(platforms) || platforms.length === 0) {
             return res.status(400).json({
@@ -194,6 +200,7 @@ export async function getGames(req: Request, res: Response) {
             .limit(limit)
             .offset(skip)
             .all();
+
 
         const total = (
             await query.aggregate((a) => ({

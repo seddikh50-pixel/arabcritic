@@ -33,9 +33,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'710f9bbd3e75cfb439668b8891483c2a32f90245c2a676cae24a31770326f759'>;
+  StorageHashBase<'3cdf3248df5d650b23cdda917b03c36cdd538ca09b070da38f65293f4d8823a0'>;
 export type ExecutionHash =
-  ExecutionHashBase<'0badad637beca963a90a8c949050b780a93543f997d71ef22477cdc754d6ee66'>;
+  ExecutionHashBase<'adcb61387c8ffd9b02f94b157dbc0a8245e5db178b0bec84c61c27286932c6b6'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -254,10 +254,22 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     };
+    readonly GameGenre: {
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly gameId: CodecTypes['pg/text@1']['output'];
+      readonly genreId: CodecTypes['pg/text@1']['output'];
+    };
     readonly GamePlatform: {
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly gameId: CodecTypes['pg/text@1']['output'];
       readonly platformId: CodecTypes['pg/text@1']['output'];
+    };
+    readonly Genre: {
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
+      readonly slug: CodecTypes['pg/text@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     };
     readonly Platform: {
       readonly id: CodecTypes['pg/text@1']['output'];
@@ -313,10 +325,22 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
+    readonly GameGenre: {
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly gameId: CodecTypes['pg/text@1']['input'];
+      readonly genreId: CodecTypes['pg/text@1']['input'];
+    };
     readonly GamePlatform: {
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly gameId: CodecTypes['pg/text@1']['input'];
       readonly platformId: CodecTypes['pg/text@1']['input'];
+    };
+    readonly Genre: {
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
+      readonly slug: CodecTypes['pg/text@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
     readonly Platform: {
       readonly id: CodecTypes['pg/text@1']['input'];
@@ -372,10 +396,22 @@ export type StorageColumnTypes = {
       readonly title: CodecTypes['pg/text@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     };
+    readonly gameGenre: {
+      readonly gameId: CodecTypes['pg/text@1']['output'];
+      readonly genreId: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+    };
     readonly gamePlatform: {
       readonly gameId: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/text@1']['output'];
       readonly platformId: CodecTypes['pg/text@1']['output'];
+    };
+    readonly genre: {
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
+      readonly id: CodecTypes['pg/text@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
+      readonly slug: CodecTypes['pg/text@1']['output'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
     };
     readonly platform: {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
@@ -431,10 +467,22 @@ export type StorageColumnInputTypes = {
       readonly title: CodecTypes['pg/text@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
+    readonly gameGenre: {
+      readonly gameId: CodecTypes['pg/text@1']['input'];
+      readonly genreId: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+    };
     readonly gamePlatform: {
       readonly gameId: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/text@1']['input'];
       readonly platformId: CodecTypes['pg/text@1']['input'];
+    };
+    readonly genre: {
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly id: CodecTypes['pg/text@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
+      readonly slug: CodecTypes['pg/text@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
     readonly platform: {
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
@@ -557,6 +605,67 @@ type ContractBase = Omit<
               indexes: readonly [];
               foreignKeys: readonly [];
             };
+            readonly gameGenre: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly gameId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly genreId: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [{ readonly columns: readonly ['gameId', 'genreId'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'gameGenre_gameId_idx_6cdb47f8';
+                  readonly prefix: 'gameGenre_gameId_idx';
+                  readonly columns: readonly ['gameId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'gameGenre_genreId_idx_8fce6a7b';
+                  readonly prefix: 'gameGenre_genreId_idx';
+                  readonly columns: readonly ['genreId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gameGenre';
+                    readonly columns: readonly ['gameId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'gameGenre';
+                    readonly columns: readonly ['genreId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'genre';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
             readonly gamePlatform: {
               columns: {
                 readonly id: {
@@ -617,6 +726,40 @@ type ContractBase = Omit<
                   };
                 },
               ];
+            };
+            readonly genre: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly slug: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly createdAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly updatedAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [{ readonly columns: readonly ['slug'] }];
+              indexes: readonly [];
+              foreignKeys: readonly [];
             };
             readonly platform: {
               columns: {
@@ -858,6 +1001,8 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'GamePlatform';
     };
+    readonly genre: { readonly namespace: 'public' & NamespaceId; readonly model: 'Genre' };
+    readonly gameGenre: { readonly namespace: 'public' & NamespaceId; readonly model: 'GameGenre' };
     readonly reviewer: { readonly namespace: 'public' & NamespaceId; readonly model: 'Reviewer' };
     readonly review: { readonly namespace: 'public' & NamespaceId; readonly model: 'Review' };
   };
@@ -922,6 +1067,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly genres: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameGenre';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['gameId'];
+                };
+              };
               readonly platforms: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -960,6 +1116,52 @@ type ContractBase = Omit<
                 readonly banner: { readonly column: 'banner' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly GameGenre: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly gameId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly genreId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly game: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Game' };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['gameId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly genre: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Genre';
+                };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['genreId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'gameGenre';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly gameId: { readonly column: 'gameId' };
+                readonly genreId: { readonly column: 'genreId' };
               };
             };
           };
@@ -1006,6 +1208,60 @@ type ContractBase = Omit<
                 readonly id: { readonly column: 'id' };
                 readonly gameId: { readonly column: 'gameId' };
                 readonly platformId: { readonly column: 'platformId' };
+              };
+            };
+          };
+          readonly Genre: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly name: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly slug: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly games: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameGenre';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['genreId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'genre';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly name: { readonly column: 'name' };
+                readonly slug: { readonly column: 'slug' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
               };
             };
           };
@@ -1316,10 +1572,35 @@ type ContractBase = Omit<
         {
           readonly ref: {
             readonly namespace: 'public';
+            readonly table: 'gameGenre';
+            readonly column: 'id';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'cuid2' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
             readonly table: 'gamePlatform';
             readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'cuid2' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'genre';
+            readonly column: 'id';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'cuid2' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'genre';
+            readonly column: 'updatedAt';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
+          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
         },
         {
           readonly ref: {

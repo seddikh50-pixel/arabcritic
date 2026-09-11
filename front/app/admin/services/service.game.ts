@@ -12,16 +12,19 @@ type GetGamesResponse = {
 };
 // ?q=${encodeURIComponent(q)}&page=${page}
 
+
 export async function getGames(
     q = "",
     page = 1,
 ): Promise<GetGamesResponse> {
-    const response = await fetch(
-        `http://localhost:5000/api/game/games`,
-        {
-            cache: "no-store",
-        }
-    );
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      const response = await fetch(
+    `${apiUrl}/game/games?q=${encodeURIComponent(q)}&page=${page}`,
+    {
+      cache: "no-store",
+    }
+  );
 
     if (!response.ok) {
         const errorText = await response.text();

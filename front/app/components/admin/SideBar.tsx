@@ -17,14 +17,21 @@ const SideBar = () => {
           href="/admin/games"
           className="mt-2 block rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-100"
         >
-          Games
+          الألعاب
         </a>
 
         <a
           href="/admin/reviews"
           className="mt-2 block rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-100"
         >
-          Reviews
+          التقييمات
+        </a>
+
+          <a
+          href="/admin/platforms"
+          className="mt-2 block rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-100"
+        >
+          المنصات
         </a>
       </nav>
     </aside>

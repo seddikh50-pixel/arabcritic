@@ -1,20 +1,15 @@
-
-
-
-
 import Image from "next/image";
 import Pagination from "@/app/components/admin/Pagination";
-import { Game } from "@/types/game";
-
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Platforms } from "@/app/components/admin/Platforms";
+import { PlatformsFilter } from "@/app/components/admin/PlatformsFilter";
 import { Genres } from "@/app/components/admin/Genres";
 import { Reviews } from "@/app/components/admin/Review";
 import GameSearch from "@/app/components/admin/GameSearch";
 import DeleteGameButton from "@/app/components/admin/DeleteGameButton";
 import { getGames } from "../services/service.game";
+import { getPlatforms } from "../services/service.platform";
 
 type Props = {
     searchParams: Promise<{
@@ -28,8 +23,9 @@ export default async function Page({ searchParams }: Props) {
 
     const q = params.q ?? "";
     const page = Number(params.page ?? "1");
-
-    const { games, total } = await getGames( q, page );
+    const { games, total } = await getGames(q, page);
+    const platforms = await getPlatforms()
+    
 
 
     return (
@@ -43,42 +39,45 @@ export default async function Page({ searchParams }: Props) {
             </h1>
 
             {/* ================= البحث والفلاتر ================= */}
-            <form
-                method="GET"
-                className="flex gap-5"
-            >
-                {/* Search */}
-                {/* <input
-                    type="text"
-                    name="q"
-                    defaultValue={q}
-                    placeholder="البحث عن الألعاب..."
-                    className="rounded-md border-2 border-gray-400 px-2 py-1"
-                /> */}
-                <GameSearch />
 
-                {/* Platform */}
-                <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
-                    <Platforms />
-                </div>
-
-                {/* Genre */}
-                <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
-                    <Genres />
-                </div>
-
-                {/* Reviews */}
-                <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
-                    <Reviews />
-                </div>
-
-                <Button
-                    type="submit"
-                    className="rounded-md bg-green-600 px-5 hover:bg-green-700"
+            <div className="flex justify-between">
+                <form
+                    method="GET"
+                    className="flex gap-5"
                 >
-                    بحث
-                </Button>
-            </form>
+                    {/* Search */}
+
+                    <GameSearch />
+
+                    {/* Platform */}
+                    <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
+                        <PlatformsFilter platforms={platforms.platforms} />
+                    </div>
+
+                    {/* Genre */}
+                    <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
+                        <Genres />
+                    </div>
+
+                    {/* Reviews */}
+                    <div className="w-60 rounded-md border-2 border-gray-400 px-2 py-1">
+                        <Reviews />
+                    </div>
+
+                    {/* <Button
+                        type="submit"
+                        className="rounded-md bg-green-600 px-5 hover:bg-green-700"
+                    >
+                        بحث
+                    </Button> */}
+                </form>
+                <div className="w-60">
+                    <Button variant={"outline"} className={"w-full bg-green-500 h-full text-white rounded-sm text-xl  py-1"} > اضافة لعبة</Button>
+                </div>
+
+            </div>
+
+
 
             {/* ================= Games ================= */}
             <div className="mt-5 overflow-hidden rounded-lg border border-gray-200 bg-white">
@@ -224,7 +223,7 @@ export default async function Page({ searchParams }: Props) {
                                     </Button>
 
                                     {/* حذف */}
-                                   <DeleteGameButton gameId={game.id} />
+                                    <DeleteGameButton gameId={game.id} />
 
                                 </div>
 

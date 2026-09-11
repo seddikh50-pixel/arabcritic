@@ -15,7 +15,7 @@ const Page = () => {
 
  
     const response = await fetch(
-      "http://localhost:5000/api/platform/add",
+      "http://localhost:5000/api/genre/add",
       {
         method: "POST",
         headers: {
@@ -66,7 +66,7 @@ const Page = () => {
               dark:text-white
             "
           >
-            إضافة منصة جديدة
+            إضافة تصنيف جديد
           </h1>
 
           <p
@@ -77,7 +77,7 @@ const Page = () => {
               dark:text-slate-400
             "
           >
-            أضف منصة ألعاب جديدة إلى قاعدة البيانات
+            أضف تصنيف  جديد إلى قاعدة البيانات
           </p>
         </div>
 

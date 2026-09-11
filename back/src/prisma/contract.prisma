@@ -1,8 +1,5 @@
-
-
-
 model User {
-    id String @id @default(cuid(2))
+  id        String   @id @default(cuid(2))
   email     String   @unique
   username  String   @unique
   name      String?
@@ -12,7 +9,7 @@ model User {
 }
 
 model Game {
-    id String @id @default(cuid(2))
+  id          String   @id @default(cuid(2))
   title       String
   slug        String   @unique
   description String?
@@ -24,13 +21,14 @@ model Game {
 
   reviews     Review[]
   platforms   GamePlatform[]
+  genres      GameGenre[]
 
   createdAt   TimestamptzString @default(now())
   updatedAt   temporal.updatedAtString()
 }
 
 model Platform {
-   id String @id @default(cuid(2))
+  id        String   @id @default(cuid(2))
   name      String
   slug      String   @unique
 
@@ -41,7 +39,7 @@ model Platform {
 }
 
 model GamePlatform {
-    id String @id @default(cuid(2))
+  id         String @id @default(cuid(2))
   gameId     String
   platformId String
 
@@ -49,25 +47,46 @@ model GamePlatform {
   platform   Platform @relation(fields: [platformId], references: [id])
 
   @@unique([gameId, platformId])
+}
 
+model Genre {
+  id        String   @id @default(cuid(2))
+  name      String
+  slug      String   @unique
+
+  games     GameGenre[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model GameGenre {
+  id      String @id @default(cuid(2))
+  gameId  String
+  genreId String
+
+  game    Game  @relation(fields: [gameId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
+
+  @@unique([gameId, genreId])
 }
 
 model Reviewer {
-    id String @id @default(cuid(2))
-  name    String
-  slug    String   @unique
-  avatar  String?
-  bio     String?
-  website String?
+  id        String   @id @default(cuid(2))
+  name      String
+  slug      String   @unique
+  avatar    String?
+  bio       String?
+  website   String?
 
-  reviews Review[]
+  reviews   Review[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
 
 model Review {
-    id String @id @default(cuid(2))
+  id          String   @id @default(cuid(2))
   title       String
   content     String?
   score       Int?
@@ -80,17 +99,10 @@ model Review {
   reviewer    Reviewer @relation(fields: [reviewerId], references: [id])
   reviewerId  String
 
-  createdAt TimestamptzString @default(now())
+  createdAt   TimestamptzString @default(now())
   updatedAt   temporal.updatedAtString()
 
   @@unique([gameId, reviewerId])
   @@index([gameId])
   @@index([reviewerId])
 }
-
-
-
-
-
-
-

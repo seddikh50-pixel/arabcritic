@@ -1,8 +1,9 @@
 export async function getPlatforms(
-  
+
 ) {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const response = await fetch(
-        `http://localhost:5000/api/platform/platforms`,
+        `${apiUrl}/platform/platforms`,
         {
             cache: "no-store",
         }
