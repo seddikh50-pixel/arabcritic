@@ -97,3 +97,29 @@ export default function RootLayout({
 
 // ✔ Up to date
 // ✔ Database marker and schema match contract
+
+
+
+
+
+
+
+
+
+// # 1. توليد الـ contract
+// npx prisma@latest contract emit
+
+// # 2. إنشاء migration مخصص (كان مطلوبًا للتغيير)
+// npx prisma@latest migration new
+
+// # 3. إنشاء قاعدة بيانات جديدة
+// npx prisma@latest postgres create arabcritic
+
+// # 4. تهيئة قاعدة البيانات الحالية حسب الـ contract
+// npx prisma@latest db init
+
+// # 5. التحقق
+// npx prisma@latest db verify
+
+// # 6. التأكد من الـ migrations
+// npx prisma@latest migration status

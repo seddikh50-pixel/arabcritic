@@ -4,27 +4,33 @@ import type { Game } from "@/types/game";
 type GetGamesParams = {
     q?: string;
     page?: number;
+    platform: string
 };
 
 type GetGamesResponse = {
     games: Game[];
     total: number;
+
 };
 // ?q=${encodeURIComponent(q)}&page=${page}
 
 
 export async function getGames(
-    q = "",
-    page = 1,
+    {
+        q = "",
+        page = 1,
+        platform = "",
+    }
+        : GetGamesParams
 ): Promise<GetGamesResponse> {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-      const response = await fetch(
-    `${apiUrl}/game/games?q=${encodeURIComponent(q)}&page=${page}`,
-    {
-      cache: "no-store",
-    }
-  );
+    const response = await fetch(
+        `${apiUrl}/game/games?q=${encodeURIComponent(q)}&page=${page}&platform=${platform}`,
+        {
+            cache: "no-store",
+        }
+    );
 
     if (!response.ok) {
         const errorText = await response.text();

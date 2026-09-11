@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { db } from "../src/prisma/db";
 import cloudinary from "../src/cloudinary";
 import slugify from "slugify";
+import { dlclose } from "node:ffi";
 interface CreateGameBody {
     title: string;
     slug: string;
@@ -66,12 +67,7 @@ export async function createGame(req: Request, res: Response) {
             platformIds
         } = req.body;
         const platforms = JSON.parse(platformIds)
-        console.log(       title,
-            description,
-            releaseDate,
-            developer,
-            publisher,
-            platformIds);
+        console.log(platforms);
 
         if (!Array.isArray(platforms) || platforms.length === 0) {
             return res.status(400).json({
@@ -137,32 +133,36 @@ export async function createGame(req: Request, res: Response) {
 
 
 
-        const game = await db.transaction(async (tx) => {
-            const game = await tx.orm.public.Game.create({
-                title,
-                slug,
-                description: description || null,
-                releaseDate: releaseDate || null,
-                developer: developer || null,
-                publisher: publisher || null,
-                cover: coverUpload.secure_url,
-                banner: bannerUpload.secure_url,
-            });
+        const game = await db.orm.public.Game.create({
+            title,
+            slug,
+            description: description || null,
+            releaseDate: releaseDate || null,
+            developer: developer || null,
+            publisher: publisher || null,
+            cover: coverUpload.secure_url,
+            banner: bannerUpload.secure_url,
 
-            await tx.orm.public.GamePlatform.createAll(
-                platforms.map((platformId: string) => ({
-                    gameId: game.id,
-                    platformId,
-                }))
-            );
+            platforms: (p) =>
+                p.connect(
+                    platforms.map((platformId: string) => ({
+                        id: platformId,
+                    }))
+                ),
 
-            return game;
+
+            //   genres: (g) =>
+            //     g.connect(
+            //       genres.map((genreId: string) => ({
+            //         id: genreId,
+            //       }))
+            //     ),
         });
 
 
 
         return res.status(201).json({
-            message: "تم ضافة اللعبة بنجاح",
+            message: "تم اضافة اللعبة بنجاح",
             success: true,
         });
     } catch (error) {
@@ -185,10 +185,13 @@ export async function getGames(req: Request, res: Response) {
     try {
         const q = req.query.q;
         const page = req.query.page || 1;
+        const platformSlug = req.query.platform
+    
 
         const limit = 5;
         const skip = (Number(page) - 1) * limit;
         let query = db.orm.public.Game;
+
 
         if (q) {
             query = query.where((game) =>
@@ -196,10 +199,20 @@ export async function getGames(req: Request, res: Response) {
             );
         }
 
+
+        if (platformSlug && typeof platformSlug === "string" ) {
+            query = query.where((game) =>
+                game.platforms.some((platform) =>
+                    platform.slug.eq(platformSlug)
+                )
+            );
+        }
+
         const games = await query
             .limit(limit)
             .offset(skip)
             .all();
+       
 
 
         const total = (
@@ -327,7 +340,7 @@ export async function updateGame(req: Request, res: Response) {
 export async function deleteGame(req: Request, res: Response) {
     try {
         const { id } = req.params;
-       
+
 
         if (Array.isArray(id)) {
             return res.status(400).json({

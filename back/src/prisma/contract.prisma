@@ -20,8 +20,8 @@ model Game {
   banner      String?
 
   reviews     Review[]
-  platforms   GamePlatform[]
-  genres      GameGenre[]
+  platforms   Platform[]
+  genres      Genre[]
 
   createdAt   TimestamptzString @default(now())
   updatedAt   temporal.updatedAtString()
@@ -32,21 +32,20 @@ model Platform {
   name      String
   slug      String   @unique
 
-  games     GamePlatform[]
+  games     Game[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
 
 model GamePlatform {
-  id         String @id @default(cuid(2))
   gameId     String
   platformId String
 
   game       Game     @relation(fields: [gameId], references: [id])
   platform   Platform @relation(fields: [platformId], references: [id])
 
-  @@unique([gameId, platformId])
+  @@id([gameId, platformId])
 }
 
 model Genre {
@@ -54,22 +53,23 @@ model Genre {
   name      String
   slug      String   @unique
 
-  games     GameGenre[]
+  games     Game[]
 
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
 
 model GameGenre {
-  id      String @id @default(cuid(2))
   gameId  String
   genreId String
 
   game    Game  @relation(fields: [gameId], references: [id])
   genre   Genre @relation(fields: [genreId], references: [id])
 
-  @@unique([gameId, genreId])
+  @@id([gameId, genreId])
 }
+
+
 
 model Reviewer {
   id        String   @id @default(cuid(2))

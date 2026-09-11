@@ -35,7 +35,6 @@ export default function Paginations({
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  console.log(total);
 
   return (
     <div className="mt-10 flex justify-start">

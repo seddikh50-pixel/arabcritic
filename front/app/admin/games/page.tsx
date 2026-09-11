@@ -11,11 +11,13 @@ import DeleteGameButton from "@/app/components/admin/DeleteGameButton";
 import { getGames } from "../services/service.game";
 import { getPlatforms } from "../services/service.platform";
 import { getGenres } from "../services/service.genre";
+import Link from "next/link";
 
 type Props = {
     searchParams: Promise<{
         q?: string;
         page?: string;
+        platform : string
     }>;
 };
 
@@ -23,8 +25,9 @@ export default async function Page({ searchParams }: Props) {
     const params = await searchParams;
 
     const q = params.q ?? "";
+      const platform = params.platform ?? "";
     const page = Number(params.page ?? "1");
-    const { games, total } = await getGames(q, page);
+    const { games, total } = await getGames({ q,page, platform});
     const platforms = await getPlatforms()
     const genres = await getGenres()
 
@@ -74,7 +77,7 @@ export default async function Page({ searchParams }: Props) {
                     </Button> */}
                 </form>
                 <div className="w-60">
-                    <Button variant={"outline"} className={"w-full bg-green-500 h-full text-white rounded-sm text-xl  py-1"} > اضافة لعبة</Button>
+                    <Link href={"/admin/games/add"} className={"w-full bg-green-500 h-full text-white rounded-sm text-xl  py-1"} > اضافة لعبة</Link>
                 </div>
 
             </div>

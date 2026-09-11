@@ -123,7 +123,7 @@
             },
             "relations": {
               "genres": {
-                "cardinality": "1:N",
+                "cardinality": "N:M",
                 "on": {
                   "localFields": [
                     "id"
@@ -132,13 +132,26 @@
                     "gameId"
                   ]
                 },
+                "through": {
+                  "childColumns": [
+                    "genreId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "gameId"
+                  ],
+                  "table": "gameGenre",
+                  "targetColumns": [
+                    "id"
+                  ]
+                },
                 "to": {
-                  "model": "GameGenre",
+                  "model": "Genre",
                   "namespace": "public"
                 }
               },
               "platforms": {
-                "cardinality": "1:N",
+                "cardinality": "N:M",
                 "on": {
                   "localFields": [
                     "id"
@@ -147,8 +160,21 @@
                     "gameId"
                   ]
                 },
+                "through": {
+                  "childColumns": [
+                    "platformId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "gameId"
+                  ],
+                  "table": "gamePlatform",
+                  "targetColumns": [
+                    "id"
+                  ]
+                },
                 "to": {
-                  "model": "GamePlatform",
+                  "model": "Platform",
                   "namespace": "public"
                 }
               },
@@ -223,13 +249,6 @@
                   "codecId": "pg/text@1",
                   "kind": "scalar"
                 }
-              },
-              "id": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
               }
             },
             "relations": {
@@ -271,9 +290,6 @@
                 },
                 "genreId": {
                   "column": "genreId"
-                },
-                "id": {
-                  "column": "id"
                 }
               },
               "namespaceId": "public",
@@ -283,13 +299,6 @@
           "GamePlatform": {
             "fields": {
               "gameId": {
-                "nullable": false,
-                "type": {
-                  "codecId": "pg/text@1",
-                  "kind": "scalar"
-                }
-              },
-              "id": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/text@1",
@@ -341,9 +350,6 @@
                 "gameId": {
                   "column": "gameId"
                 },
-                "id": {
-                  "column": "id"
-                },
                 "platformId": {
                   "column": "platformId"
                 }
@@ -392,7 +398,7 @@
             },
             "relations": {
               "games": {
-                "cardinality": "1:N",
+                "cardinality": "N:M",
                 "on": {
                   "localFields": [
                     "id"
@@ -401,8 +407,21 @@
                     "genreId"
                   ]
                 },
+                "through": {
+                  "childColumns": [
+                    "gameId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "genreId"
+                  ],
+                  "table": "gameGenre",
+                  "targetColumns": [
+                    "id"
+                  ]
+                },
                 "to": {
-                  "model": "GameGenre",
+                  "model": "Game",
                   "namespace": "public"
                 }
               }
@@ -469,7 +488,7 @@
             },
             "relations": {
               "games": {
-                "cardinality": "1:N",
+                "cardinality": "N:M",
                 "on": {
                   "localFields": [
                     "id"
@@ -478,8 +497,21 @@
                     "platformId"
                   ]
                 },
+                "through": {
+                  "childColumns": [
+                    "gameId"
+                  ],
+                  "namespaceId": "public",
+                  "parentColumns": [
+                    "platformId"
+                  ],
+                  "table": "gamePlatform",
+                  "targetColumns": [
+                    "id"
+                  ]
+                },
                 "to": {
-                  "model": "GamePlatform",
+                  "model": "Game",
                   "namespace": "public"
                 }
               }
@@ -923,11 +955,6 @@
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": false
-                },
-                "id": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
                 }
               },
               "foreignKeys": [
@@ -984,26 +1011,15 @@
               ],
               "primaryKey": {
                 "columns": [
-                  "id"
+                  "gameId",
+                  "genreId"
                 ]
               },
-              "uniques": [
-                {
-                  "columns": [
-                    "gameId",
-                    "genreId"
-                  ]
-                }
-              ]
+              "uniques": []
             },
             "gamePlatform": {
               "columns": {
                 "gameId": {
-                  "codecId": "pg/text@1",
-                  "nativeType": "text",
-                  "nullable": false
-                },
-                "id": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": false
@@ -1068,17 +1084,11 @@
               ],
               "primaryKey": {
                 "columns": [
-                  "id"
+                  "gameId",
+                  "platformId"
                 ]
               },
-              "uniques": [
-                {
-                  "columns": [
-                    "gameId",
-                    "platformId"
-                  ]
-                }
-              ]
+              "uniques": []
             },
             "genre": {
               "columns": {
@@ -1422,10 +1432,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "3cdf3248df5d650b23cdda917b03c36cdd538ca09b070da38f65293f4d8823a0"
+    "storageHash": "6bf1ca857e8894e2adba8405186ead6f41c56273576352bd90c73fdc7c83f6f8"
   },
   "execution": {
-    "executionHash": "adcb61387c8ffd9b02f94b157dbc0a8245e5db178b0bec84c61c27286932c6b6",
+    "executionHash": "06a921ae289537ea779233c156b4c1b4a21c5842651a665c9d2efaa07785a6da",
     "mutations": {
       "defaults": [
         {
@@ -1452,28 +1462,6 @@
             "column": "updatedAt",
             "namespace": "public",
             "table": "game"
-          }
-        },
-        {
-          "onCreate": {
-            "id": "cuid2",
-            "kind": "generator"
-          },
-          "ref": {
-            "column": "id",
-            "namespace": "public",
-            "table": "gameGenre"
-          }
-        },
-        {
-          "onCreate": {
-            "id": "cuid2",
-            "kind": "generator"
-          },
-          "ref": {
-            "column": "id",
-            "namespace": "public",
-            "table": "gamePlatform"
           }
         },
         {
