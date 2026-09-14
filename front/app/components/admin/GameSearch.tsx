@@ -22,7 +22,7 @@ export default function GameSearch() {
         params.delete("q");
       }
 
-      params.set("page", "1");
+      // params.set("page", "1");
 
       router.push(`?${params.toString()}`);
     }, 400);
@@ -37,7 +37,7 @@ export default function GameSearch() {
     //   defaultValue={searchParams.get("q") ?? ""}
       onChange={(e) => setValue(e.target.value)}
       placeholder="البحث عن الألعاب..."
-      className="rounded-md border-2 border-gray-400 px-2 py-1"
+      className="rounded-md border-2 border-gray-400 px-3 py-1"
     />
   );
 }

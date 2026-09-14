@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Pagination from "@/app/components/admin/Pagination";
-import { Pencil } from "lucide-react";
+import { Pencil, SquarePlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PlatformsFilter } from "@/app/components/admin/PlatformsFilter";
-import {  GenresFilter } from "@/app/components/admin/GenresFilter";
+import { GenresFilter } from "@/app/components/admin/GenresFilter";
 import { Reviews } from "@/app/components/admin/Review";
 import GameSearch from "@/app/components/admin/GameSearch";
 import DeleteGameButton from "@/app/components/admin/DeleteGameButton";
@@ -17,7 +17,8 @@ type Props = {
     searchParams: Promise<{
         q?: string;
         page?: string;
-        platform : string
+        platform: string
+        genre: string
     }>;
 };
 
@@ -25,11 +26,13 @@ export default async function Page({ searchParams }: Props) {
     const params = await searchParams;
 
     const q = params.q ?? "";
-      const platform = params.platform ?? "";
+    const platform = params.platform ?? "";
+    const genre = params.genre ?? "";
     const page = Number(params.page ?? "1");
-    const { games, total } = await getGames({ q,page, platform});
+    const { games, total } = await getGames({ q, page, platform, genre });
     const platforms = await getPlatforms()
     const genres = await getGenres()
+
 
 
 
@@ -69,15 +72,9 @@ export default async function Page({ searchParams }: Props) {
                         <Reviews />
                     </div>
 
-                    {/* <Button
-                        type="submit"
-                        className="rounded-md bg-green-600 px-5 hover:bg-green-700"
-                    >
-                        بحث
-                    </Button> */}
                 </form>
-                <div className="w-60">
-                    <Link href={"/admin/games/add"} className={"w-full bg-green-500 h-full text-white rounded-sm text-xl  py-1"} > اضافة لعبة</Link>
+                <div className="w-64 bg-amber-600 flex justify-center items-center rounded-sm">
+                    <Link href={"/admin/games/add"} className={"w-full  bg-green-600 h-full text-white rounded-sm text-xl flex justify-center items-center gap-3  "} > <SquarePlus />اضافة لعبة </Link>
                 </div>
 
             </div>
@@ -151,8 +148,8 @@ export default async function Page({ searchParams }: Props) {
                                             src={game.cover}
                                             alt={game.title}
                                             width={50}
-                                            height={70}
-                                            className="h-[70px] w-[50px] rounded object-cover"
+                                            height={60}
+                                            className="h-[70px] w-[60px] rounded object-cover"
                                         />
 
                                     ) : (
@@ -219,13 +216,13 @@ export default async function Page({ searchParams }: Props) {
                                 <div className="flex gap-2">
 
                                     {/* تعديل */}
-                                    <Button
-                                        variant="outline"
-                                        className="flex items-center justify-center gap-2 rounded-sm bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
+                                    <Link
+                                        href={`/admin/games/edit/${game.slug}`}
+                                        className="flex items-center justify-center gap-2 rounded-sm bg-blue-600 px-3 py-1.5 text-sm font-black text-white hover:bg-blue-700"
                                     >
                                         <Pencil size={15} />
                                         تعديل
-                                    </Button>
+                                    </Link>
 
                                     {/* حذف */}
                                     <DeleteGameButton gameId={game.id} />

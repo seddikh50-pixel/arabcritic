@@ -19,7 +19,7 @@ export default function Paginations({
   currentPage,
 }: Props) {
 
-    
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -29,15 +29,20 @@ export default function Paginations({
       searchParams.toString()
     );
 
+
+    if (value <= 1) {
+      params.delete('page')
+    } else { params.set("page", value.toString()); }
+
+
     // تغيير رقم الصفحة
-    params.set("page", value.toString());
 
     router.push(`${pathname}?${params.toString()}`);
   };
 
 
   return (
-    <div className="mt-10 flex justify-start">
+    <div className="mt-5 flex justify-center">
       <Stack spacing={2}>
         <Pagination
           count={total}
@@ -49,15 +54,18 @@ export default function Paginations({
             direction: "ltr",
 
             "& .MuiPaginationItem-root": {
-              borderColor: "green",
-              color: "green",
-              fontWeight: "bold",
+borderColor: "#d1d5db",
+              color: "gray",
+                    fontWeight: "bold",
+             
             },
 
             "& .MuiPaginationItem-root.Mui-selected": {
               backgroundColor: "green",
               color: "white",
-              borderColor: "green",
+              borderColor: "green", 
+                    fontWeight: "bold",
+
             },
           }}
         />

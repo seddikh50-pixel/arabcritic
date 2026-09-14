@@ -254,6 +254,7 @@
             "relations": {
               "game": {
                 "cardinality": "N:1",
+                "nullable": false,
                 "on": {
                   "localFields": [
                     "gameId"
@@ -269,6 +270,7 @@
               },
               "genre": {
                 "cardinality": "N:1",
+                "nullable": false,
                 "on": {
                   "localFields": [
                     "genreId"
@@ -316,6 +318,7 @@
             "relations": {
               "game": {
                 "cardinality": "N:1",
+                "nullable": false,
                 "on": {
                   "localFields": [
                     "gameId"
@@ -331,6 +334,7 @@
               },
               "platform": {
                 "cardinality": "N:1",
+                "nullable": false,
                 "on": {
                   "localFields": [
                     "platformId"
@@ -614,6 +618,7 @@
             "relations": {
               "game": {
                 "cardinality": "N:1",
+                "nullable": false,
                 "on": {
                   "localFields": [
                     "gameId"
@@ -629,6 +634,7 @@
               },
               "reviewer": {
                 "cardinality": "N:1",
+                "nullable": false,
                 "on": {
                   "localFields": [
                     "reviewerId"
@@ -959,6 +965,7 @@
               },
               "foreignKeys": [
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "gameId"
@@ -1032,6 +1039,7 @@
               },
               "foreignKeys": [
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "gameId"
@@ -1243,6 +1251,7 @@
               },
               "foreignKeys": [
                 {
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "gameId"
@@ -1432,7 +1441,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6bf1ca857e8894e2adba8405186ead6f41c56273576352bd90c73fdc7c83f6f8"
+    "storageHash": "2e59844481b027439cd537f7c357502c718a719d73d97df6625ca013f7e6a50e"
   },
   "execution": {
     "executionHash": "06a921ae289537ea779233c156b4c1b4a21c5842651a665c9d2efaa07785a6da",

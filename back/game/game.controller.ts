@@ -64,14 +64,20 @@ export async function createGame(req: Request, res: Response) {
             releaseDate,
             developer,
             publisher,
-            platformIds
+            platformIds,
+            genreIds
         } = req.body;
         const platforms = JSON.parse(platformIds)
-        console.log(platforms);
+        const genres = JSON.parse(genreIds)
 
-        if (!Array.isArray(platforms) || platforms.length === 0) {
+        if (
+            !Array.isArray(platforms) ||
+            platforms.length === 0 ||
+            !Array.isArray(genres) ||
+            genres.length === 0
+        ) {
             return res.status(400).json({
-                message: "يجب اختيار منصة على الأقل",
+                message: "يجب اختيار منصة تصنيف واحد على الأقل",
                 success: false,
             });
         }
@@ -151,12 +157,12 @@ export async function createGame(req: Request, res: Response) {
                 ),
 
 
-            //   genres: (g) =>
-            //     g.connect(
-            //       genres.map((genreId: string) => ({
-            //         id: genreId,
-            //       }))
-            //     ),
+            genres: (g) =>
+                g.connect(
+                    genres.map((genreId: string) => ({
+                        id: genreId,
+                    }))
+                ),
         });
 
 
@@ -185,8 +191,20 @@ export async function getGames(req: Request, res: Response) {
     try {
         const q = req.query.q;
         const page = req.query.page || 1;
-        const platformSlug = req.query.platform
-    
+        const platform = typeof req.query.platform === "string"
+            ? req.query.platform
+            : undefined;
+
+        const genre = typeof req.query.genre === "string"
+            ? req.query.genre
+            : undefined;
+
+
+            console.log(genre,platform );
+
+
+
+
 
         const limit = 5;
         const skip = (Number(page) - 1) * limit;
@@ -200,11 +218,15 @@ export async function getGames(req: Request, res: Response) {
         }
 
 
-        if (platformSlug && typeof platformSlug === "string" ) {
+        if (platform) {
             query = query.where((game) =>
-                game.platforms.some((platform) =>
-                    platform.slug.eq(platformSlug)
-                )
+                game.platforms.some((p) => p.slug.eq(platform))
+            );
+        }
+
+        if (genre) {
+            query = query.where((game) =>
+                game.genres.some((g) => g.slug.eq(genre))
             );
         }
 
@@ -212,7 +234,9 @@ export async function getGames(req: Request, res: Response) {
             .limit(limit)
             .offset(skip)
             .all();
-       
+
+
+
 
 
         const total = (
@@ -340,6 +364,8 @@ export async function updateGame(req: Request, res: Response) {
 export async function deleteGame(req: Request, res: Response) {
     try {
         const { id } = req.params;
+
+        console.log(id);
 
 
         if (Array.isArray(id)) {

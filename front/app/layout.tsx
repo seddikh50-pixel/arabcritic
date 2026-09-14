@@ -123,3 +123,127 @@ export default function RootLayout({
 
 // # 6. التأكد من الـ migrations
 // npx prisma@latest migration status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// model User {
+//   id        String   @id @default(cuid(2))
+//   email     String   @unique
+//   username  String   @unique
+//   name      String?
+
+//   createdAt TimestamptzString @default(now())
+//   updatedAt temporal.updatedAtString()
+// }
+
+// model Game {
+//   id          String   @id @default(cuid(2))
+//   title       String
+//   slug        String   @unique
+//   description String?
+//   cover       String?
+//   releaseDate TimestamptzString?
+//   developer   String?
+//   publisher   String?
+//   banner      String?
+
+//   reviews     Review[]
+//   platforms   Platform[]
+//   genres      Genre[]
+
+//   createdAt   TimestamptzString @default(now())
+//   updatedAt   temporal.updatedAtString()
+// }
+
+// model Platform {
+//   id        String   @id @default(cuid(2))
+//   name      String
+//   slug      String   @unique
+
+//   games     Game[]
+
+//   createdAt TimestamptzString @default(now())
+//   updatedAt temporal.updatedAtString()
+// }
+
+// model GamePlatform {
+//   gameId     String
+//   platformId String
+
+//   game       Game     @relation(fields: [gameId], references: [id],  onDelete: Cascade)
+//   platform   Platform @relation(fields: [platformId], references: [id])
+
+//   @@id([gameId, platformId])
+// }
+
+// model Genre {
+//   id        String   @id @default(cuid(2))
+//   name      String
+//   slug      String   @unique
+
+//   games     Game[]
+
+//   createdAt TimestamptzString @default(now())
+//   updatedAt temporal.updatedAtString()
+// }
+
+// model GameGenre {
+//   gameId  String
+//   genreId String
+
+//   game    Game  @relation(fields: [gameId], references: [id],  onDelete: Cascade)
+//   genre   Genre @relation(fields: [genreId], references: [id])
+
+//   @@id([gameId, genreId])
+// }
+
+
+
+// model Reviewer {
+//   id        String   @id @default(cuid(2))
+//   name      String
+//   slug      String   @unique
+//   avatar    String?
+//   bio       String?
+//   website   String?
+
+//   reviews   Review[]
+
+//   createdAt TimestamptzString @default(now())
+//   updatedAt temporal.updatedAtString()
+// }
+
+// model Review {
+//   id          String   @id @default(cuid(2))
+//   title       String
+//   content     String?
+//   score       Int?
+//   url         String?
+//   publishedAt TimestamptzString?
+
+//   game        Game     @relation(fields: [gameId], references: [id] ,onDelete: Cascade)
+//   gameId      String
+
+//   reviewer    Reviewer @relation(fields: [reviewerId], references: [id])
+//   reviewerId  String
+
+//   createdAt   TimestamptzString @default(now())
+//   updatedAt   temporal.updatedAtString()
+
+//   @@unique([gameId, reviewerId])
+//   @@index([gameId])
+//   @@index([reviewerId])
+// }

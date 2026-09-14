@@ -14,36 +14,31 @@ import {
 } from "@/components/ui/combobox"
 
 
-interface PlatType {
+interface GenreType {
     id: string;
     name: string
     slug: string
 }
 
-interface PlatformsSelectionProps {
-    platforms: PlatType[];
+interface GenresSelectionProps {
+    genres: GenreType[];
     selectedPlatformIds: string[];
     setSelectedPlatformIds: Dispatch<SetStateAction<string[]>>;
 }
 
 
-const PlatformsSelection = ({ platforms, selectedPlatformIds, setSelectedPlatformIds, }: PlatformsSelectionProps) => {
+const GenresSelection = ({ genres, selectedPlatformIds, setSelectedPlatformIds, }: GenresSelectionProps) => {
     const anchor = useComboboxAnchor()
-
-
-
-
-
 
     return (
         <div>
             <div>
-                <label>المنصات</label>
+                <label>التصنيفات</label>
                 <Combobox
                     multiple
                     autoHighlight
                     value={selectedPlatformIds}
-                    items={platforms}
+                    items={genres}
                     onValueChange={(values) => {
                         setSelectedPlatformIds(values);
                     }}
@@ -54,13 +49,13 @@ const PlatformsSelection = ({ platforms, selectedPlatformIds, setSelectedPlatfor
                             {(values) => (
                                 <>
                                     {values.map((value: string) => {
-                                        const platform = platforms.find(
+                                        const genre = genres.find(
                                             (p) => p.id === value
                                         );
 
                                         return (
                                             <ComboboxChip key={value}>
-                                                {platform?.name}
+                                                {genre?.name}
                                             </ComboboxChip>
                                         );
                                     })}
@@ -94,4 +89,8 @@ const PlatformsSelection = ({ platforms, selectedPlatformIds, setSelectedPlatfor
     )
 }
 
-export default PlatformsSelection
+
+
+
+
+export default GenresSelection

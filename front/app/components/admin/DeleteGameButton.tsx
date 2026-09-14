@@ -65,7 +65,7 @@ export default function DeleteGameButton({ gameId }: Props) {
     return (
         <AlertDialog>
             <AlertDialogTrigger
-                className="inline-flex items-center justify-center gap-2 rounded-sm bg-red-600 px-3 py-1.5 text-sm text-white transition hover:bg-red-700"
+                className="inline-flex items-center font-black justify-center gap-2 rounded-sm bg-red-600 px-3 py-1.5 text-sm text-white transition hover:bg-red-700"
             >
                 <Trash2 size={15} />
                 حذف

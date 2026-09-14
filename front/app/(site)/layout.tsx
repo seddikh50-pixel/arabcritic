@@ -1,4 +1,5 @@
 import Header from "@/app/components/header/Header";
+import { ThemeProvider } from "@/app/components/derlAndLight/theme-provider";
 
 export default function SiteLayout({
   children,
@@ -7,11 +8,19 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      <Header />
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <Header />
 
-      <main>
-        {children}
-      </main>
+        <main>
+          {children}
+        </main>
+      </ThemeProvider>
+
     </>
   );
 }

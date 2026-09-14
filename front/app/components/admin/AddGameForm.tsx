@@ -1,10 +1,13 @@
 
 "use client";
 
-import { enqueueSnackbar } from "notistack";
-import { FormEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import PlatformsSelection from "./PlatformsSelection";
-
+import GenresSelection from "./GenresSelection";
+import { X } from "lucide-react";
+import Image from "next/image";
+import { useRef } from "react";
+import { useAddGame } from "@/app/admin/hooks/useAddGame";
 
 interface PlatType {
   id: string;
@@ -12,97 +15,72 @@ interface PlatType {
   slug: string
 }
 
-interface PlatProps {
-  platforms: PlatType[]
+interface GenType {
+  id: string;
+  name: string
+  slug: string
 }
 
-const AddGameForm = ({ platforms }: PlatProps) => {
+interface PlatProps {
+  platforms: PlatType[]
+  genres: GenType[]
+}
 
+const AddGameForm = ({ platforms, genres }: PlatProps) => {
+  const defaultCover = "/imagecover.jpg";
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const [coverPreview, setCoverPreview] = useState<string | null>(null);
-  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
+  const [bannerPreview, setBannerPreview] = useState(defaultCover);
   const [selectedPlatformIds, setSelectedPlatformIds] = useState<string[]>([]);
+  const [selectedGenresIds, setSelectedGenresIds] = useState<string[]>([]);
+  const [cover, setCover] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState(defaultCover);
+  const [banner, setBanner] = useState<File | null>(null);
 
-  useEffect(() => { console.log(selectedPlatformIds); }, [selectedPlatformIds])
-
-  function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "cover" | "banner"
+  ) {
     const file = e.target.files?.[0];
 
-    if (file) {
-      setCoverPreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    const preview = URL.createObjectURL(file);
+
+    if (type === "cover") {
+      setCover(file);
+      setCoverPreview(preview);
+    } else {
+      setBanner(file);
+      setBannerPreview(preview);
     }
   }
 
-  function handleBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      setBannerPreview(URL.createObjectURL(file));
+  function handleImageRemove(type: "cover" | "banner") {
+    if (type === "cover") {
+      setCover(null);
+      setCoverPreview(defaultCover);
+      inputRef.current!.value = "";
+    } else {
+      setBanner(null);
+      setBannerPreview(defaultCover);
+      bannerInputRef.current!.value = "";
     }
   }
+  const { handleSubmit, loading } = useAddGame({
+    selectedPlatformIds,
+    selectedGenresIds,
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const formElement = e.currentTarget;
-
-    setLoading(true);
-    setMessage("");
-
-    const form = new FormData(e.currentTarget);
-
-    form.append(
-      "platformIds",
-      JSON.stringify(selectedPlatformIds)
-    );
-
-    try {
-      const response = await fetch("http://localhost:5000/api/game/add", {
-        method: "POST",
-        body: form,
-      });
-
-      const result = await response.json();
-      if (!response.ok || !result.success) {
-        enqueueSnackbar(result.message || "حدث خطأ", {
-          variant: "error",
-        });
-
-        return;
-      }
-
-      console.log(result);
-
-      enqueueSnackbar(result.message, {
-        variant: "success",
-      });
+    onSuccess: () => {
+      setCoverPreview(defaultCover);
+      setBannerPreview(defaultCover);
+      setCover(null);
+      setBanner(null);
+    },
+  });
 
 
-
-
-
-      setMessage("تمت إضافة اللعبة بنجاح");
-
-      formElement.reset();
-
-
-      setCoverPreview(null);
-      setBannerPreview(null);
-    } catch (error) {
-      console.error(error);
-
-      setMessage(
-        error instanceof Error
-          ? error.message
-          : "حدث خطأ أثناء إضافة اللعبة"
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <div>
@@ -119,30 +97,22 @@ const AddGameForm = ({ platforms }: PlatProps) => {
               اسم اللعبة
             </label>
 
-            <input
-              type="text"
-              name="title"
-              required
-              placeholder="GTA V"
-              className="w-full rounded-lg border p-3"
-            />
+            <input type="text" name="title" required placeholder="GTA V" className="w-full rounded-lg border p-3" />
           </div>
 
-          <PlatformsSelection platforms={platforms} selectedPlatformIds={selectedPlatformIds} setSelectedPlatformIds={setSelectedPlatformIds} />
+          <div>
+            < PlatformsSelection platforms={platforms} selectedPlatformIds={selectedPlatformIds} setSelectedPlatformIds={setSelectedPlatformIds} />
+          </div>
+          <div>
+            < GenresSelection genres={genres} selectedPlatformIds={selectedGenresIds} setSelectedPlatformIds={setSelectedGenresIds} />
+          </div>
 
           {/* Slug */}
           <div>
             <label className="block mb-2 font-medium">
               Slug
             </label>
-
-            <input
-              type="text"
-              name="slug"
-              required
-              placeholder="gta-v"
-              className="w-full rounded-lg border p-3"
-            />
+            <input type="text" name="slug" required placeholder="gta-v" className="w-full rounded-lg border p-3" />
           </div>
 
           {/* Description */}
@@ -151,11 +121,7 @@ const AddGameForm = ({ platforms }: PlatProps) => {
               الوصف
             </label>
 
-            <textarea
-              name="description"
-              rows={5}
-              placeholder="وصف اللعبة..."
-              className="w-full rounded-lg border p-3"
+            <textarea name="description" rows={5} placeholder="وصف اللعبة..." className="w-full rounded-lg border p-3"
             />
           </div>
 
@@ -167,48 +133,47 @@ const AddGameForm = ({ platforms }: PlatProps) => {
               غلاف اللعبة
             </label>
 
-            <input
-              type="file"
-              name="cover"
-              accept="image/*"
-              onChange={handleCoverChange}
-              className="w-full rounded-lg border p-3"
+            <input ref={inputRef} id="cover" type="file" name="cover" accept="image/*" onChange={(e) => handleImageChange(e, "cover")} className="w-full rounded-lg border p-3" hidden
             />
 
-            {coverPreview && (
-              <div className="mt-4">
-                <img
-                  src={coverPreview}
-                  alt="Cover preview"
-                  className="h-64 w-44 rounded-lg object-cover border"
+            <div className="relative w-40 h-56">
+              <label htmlFor="cover" className="  block  w-full h-full">
+                <Image src={coverPreview} alt="غلاف اللعبة" fill className="rounded-lg object-cover border"
                 />
-              </div>
-            )}
+
+
+              </label>
+              {cover && (
+                <X
+                  className="absolute top-2 left-2 z-10 cursor-pointer text-white"
+                  onClick={() => handleImageRemove("cover")}
+                />
+              )}
+            </div>
           </div>
 
           {/* Banner */}
           <div>
             <label className="block mb-2 font-medium">
-              Banner اللعبة
-            </label>
+              بانر اللعبة            </label>
 
-            <input
-              type="file"
-              name="banner"
-              accept="image/*"
-              onChange={handleBannerChange}
-              className="w-full rounded-lg border p-3"
+            <input ref={bannerInputRef} id="banner" type="file" name="banner" accept="image/*" onChange={(e) => handleImageChange(e, "banner")} className="w-full rounded-lg border p-3" hidden
             />
 
-            {bannerPreview && (
-              <div className="mt-4">
-                <img
-                  src={bannerPreview}
-                  alt="Banner preview"
-                  className="w-full h-48 rounded-lg object-cover border"
+            <div className="relative  h-56">
+              <label htmlFor="banner" className="  block  w-full h-full">
+                <Image src={bannerPreview} alt="غلاف اللعبة" fill className="rounded-lg object-cover border"
                 />
-              </div>
-            )}
+
+
+              </label>
+              {banner && (
+                <X
+                  className="absolute top-2 left-2 z-10 cursor-pointer text-white"
+                  onClick={() => handleImageRemove("banner")}
+                />
+              )}
+            </div>
           </div>
 
           {/* Release Date */}
@@ -217,10 +182,7 @@ const AddGameForm = ({ platforms }: PlatProps) => {
               تاريخ الإصدار
             </label>
 
-            <input
-              type="date"
-              name="releaseDate"
-              className="w-full rounded-lg border p-3"
+            <input type="date" name="releaseDate" className="w-full rounded-lg border p-3"
             />
           </div>
 
@@ -230,11 +192,7 @@ const AddGameForm = ({ platforms }: PlatProps) => {
               المطور
             </label>
 
-            <input
-              type="text"
-              name="developer"
-              placeholder="Rockstar Games"
-              className="w-full rounded-lg border p-3"
+            <input type="text" name="developer" placeholder="Rockstar Games" className="w-full rounded-lg border p-3"
             />
           </div>
 
@@ -244,29 +202,16 @@ const AddGameForm = ({ platforms }: PlatProps) => {
               الناشر
             </label>
 
-            <input
-              type="text"
-              name="publisher"
-              placeholder="Rockstar Games"
-              className="w-full rounded-lg border p-3"
+            <input type="text" name="publisher" placeholder="Rockstar Games" className="w-full rounded-lg border p-3"
             />
           </div>
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-black px-6 py-3 text-white disabled:opacity-50"
+          <button type="submit" disabled={loading} className="w-full rounded-lg bg-black px-6 py-3 text-white disabled:opacity-50"
           >
             {loading ? "جاري الإضافة..." : "إضافة لعبة"}
           </button>
 
-          {/* Message */}
-          {message && (
-            <p className="text-center font-medium">
-              {message}
-            </p>
-          )}
         </form>
 
       </main>

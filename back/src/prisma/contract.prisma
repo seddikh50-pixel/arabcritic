@@ -1,3 +1,4 @@
+
 model User {
   id        String   @id @default(cuid(2))
   email     String   @unique
@@ -42,7 +43,7 @@ model GamePlatform {
   gameId     String
   platformId String
 
-  game       Game     @relation(fields: [gameId], references: [id])
+  game       Game     @relation(fields: [gameId], references: [id],  onDelete: Cascade)
   platform   Platform @relation(fields: [platformId], references: [id])
 
   @@id([gameId, platformId])
@@ -63,7 +64,7 @@ model GameGenre {
   gameId  String
   genreId String
 
-  game    Game  @relation(fields: [gameId], references: [id])
+  game    Game  @relation(fields: [gameId], references: [id],  onDelete: Cascade)
   genre   Genre @relation(fields: [genreId], references: [id])
 
   @@id([gameId, genreId])
@@ -93,7 +94,7 @@ model Review {
   url         String?
   publishedAt TimestamptzString?
 
-  game        Game     @relation(fields: [gameId], references: [id])
+  game        Game     @relation(fields: [gameId], references: [id] ,onDelete: Cascade)
   gameId      String
 
   reviewer    Reviewer @relation(fields: [reviewerId], references: [id])
